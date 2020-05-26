@@ -9,6 +9,8 @@ import Domain.Jobs.*;
 import Domain.User.Member;
 import javafx.util.Pair;
 
+import java.time.LocalDateTime;
+
 public class InsertToDB {
     SQLServerDBAccess DBAccess;
     public InsertToDB(){
@@ -22,22 +24,6 @@ public class InsertToDB {
         String[] values={league.getName(),league.getSchedulingPolicy().getNumOf2TeamsGames()+"",ppw,ppl,ppd};
         if(!DBAccess.insertToDB(1,values))
             return false;
-        for (MainReferee ref:league.getLeagueReferees()) {
-            if(!addMainRefereeToLeagueInDB(ref,league))
-                return false;
-        }
-        for (VarReferee ref:league.getLeagueVarReferees()) {
-            if(!addVarRefereeToLeagueInDB(ref,league))
-                return false;
-        }
-        for (LinesManReferee ref:league.getLeagueLinesmans()) {
-            if(!addLineRefereeToLeagueInDB(ref,league))
-                return false;
-        }
-        for (Season season:league.getAllSeasons()) {
-            if(!addSeasonToDB(season,league.getName()))
-                return false;
-        }
         return true;
     }
 
@@ -48,14 +34,6 @@ public class InsertToDB {
         String[] values={league,season.getYear()+"",season.getSchedulingPolicy().getNumOf2TeamsGames()+"",ppw,ppl,ppd};
         if(!DBAccess.insertToDB(2,values))
             return false;
-        for (LeaguePosition lp: season.getTable().getPositions()) {
-            if(!addLeaguePositionToDB(lp,season.getYear()+"",league))
-                return false;
-        }
-        for(FootballGame game:season.getGames()){
-            if(!addGameToDB(game,season.getYear()+"",league))
-                return false;
-        }
         return true;
     }
 
@@ -69,15 +47,37 @@ public class InsertToDB {
         String[] values={LeageName,SeasonYear,game.getHomeTeamName(),game.getAwayTeamName(),date,game.getHomeGoals()+"",game.getAwayGoals()+"",stadium,mainRef,varRef,line1,line2};
         if(!DBAccess.insertToDB(3,values))
             return false;
-        for (Event event:game.getEvents()) {
-            /*if(event instanceof GameEvent){
-                /*if(!addGameEventToDB((GameEvent) event,game))
-                    return false;
-            }else if(!addGameOtherEventToDB(event,game))
-                    return false;*/
-        }
         return true;
     }
+
+    /*private boolean addGameEventToFB(FootballGame game,Event gameEvent){
+        if(gameEvent instanceof FoulEvent){
+            String[] values={game.getDate().toString(),game.getHomeTeamName(),game.getAwayTeamName(),"1"};
+            if(!DBAccess.insertToDB(8,values))
+                return false;
+        }
+        else if(gameEvent instanceof GoalEvent){
+            String[] values={game.getDate().toString(),game.getHomeTeamName(),game.getAwayTeamName(),"1",gameEvent.toString()};
+            if(!DBAccess.insertToDB(9,values))
+                return false;
+        }else if(event instanceof InjuryEvent){
+            String[] values={game.toString(),time,team,player};
+            if(!DBAccess.insertToDB(10,values))
+                return false;
+        }else if(event instanceof OffsideEvent){
+            String[] values={game.toString(),time,team,player};
+            if(!DBAccess.insertToDB(11,values))
+                return false;
+        }else if(event instanceof RedCardEvent){
+            String[] values={game.toString(),time,team,player};
+            if(!DBAccess.insertToDB(12,values))
+                return false;
+        }else if(event instanceof YellowCardEvent){
+            String[] values={game.toString(),time,team,player};
+            if(!DBAccess.insertToDB(13,values))
+                return false;
+        }
+    }*/
 
     private boolean addLeaguePositionToDB(LeaguePosition leaguePosition,String year,String leagueName){
         String gamesWon=leaguePosition.getGamesWon()+"";
@@ -164,60 +164,37 @@ public class InsertToDB {
         String[] values={team.getTeamName(),team.getStatus().ordinal()+"",team.getHomeStadium().getStadiumName()};
         if(!DBAccess.insertToDB(14,values))
             return false;
-        if(!addBudgetToTeamInDB(team.getBudget(),team))
-            return false;
-        for (TeamOwner owner:team.getOwners()) {
-            if(!addOwnerToTeamInDB(owner,team))
-                return false;
-        }
-        for (Player player:team.getPlayers()) {
-            if(!addPlayerToTeamInDB(player,team))
-                return false;
-        }
-        for (Coach coach:team.getCoaches()) {
-            if(!addCoachToTeamInDB(coach,team))
-                return false;
-        }
-        for (TeamManager coach:team.getManagers()) {
-            if(!addManagerToTeamInDB(coach,team))
-                return false;
-        }
-        for (Observer observer:team.getFanObservers()) {
-            String[] secValues={team.toString(),((Member)observer).getUser_id()+""};
-            if(!DBAccess.insertToDB(22,values))
-                return false;
-        }
-        for (Observer observer:team.getJobsObservers()) {
-            String[] secValues={team.toString(),((Member)observer).getUser_id()+""};
-            if(!DBAccess.insertToDB(23,values))
-                return false;
-        }
         return true;
     }
 
+    public boolean addFanToTeamInDB(Team team,Member observer){
+        String[] values={team.toString(),(observer).getUser_id()+""};
+        if(!DBAccess.insertToDB(22,values))
+            return false;
+        return true;
+    }
 
-
-    private boolean addBudgetToTeamInDB(Budget budget, Team team) {
-        for (Pair p:budget.getReports()) {
-            String time=p.getKey().toString();
-            String money=((Pair)p.getValue()).getKey()+"";
-            String description=((Pair)p.getValue()).getValue()+"";
+    public boolean addBudgetTransactionInDB(Team team, Pair<LocalDateTime,Pair<Double,String>> transaction) {
+            String time=transaction.getKey().toString();
+            String money=((Pair)transaction.getValue()).getKey()+"";
+            String description=((Pair)transaction.getValue()).getValue()+"";
             String[] secValues={team.getTeamName(),time,money,description};
             if(!DBAccess.insertToDB(16,secValues))
                 return false;
-        }
-        return true;
+             return true;
     }
 
-    private boolean addOwnerToTeamInDB(TeamOwner owner, Team team) {
+    public boolean addOwnerToTeamInDB(TeamOwner owner, Team team) {
         String[] values={owner.getMember().getUser_id(),team.toString()};
         if(!DBAccess.insertToDB(17,values))
             return false;
-        for (Job job:owner.getAppointmentList()) {
-            String[] secValues={owner.getMember().getUser_id(),job.getMember().getUser_id()};
-            if(!DBAccess.insertToDB(18,secValues))
-                return false;
-        }
+        return true;
+    }
+
+    public boolean addAppointmentToOwnerInDB(TeamOwner owner,Job appointment){
+        String[] secValues={owner.getMember().getUser_id(),appointment.getMember().getUser_id()};
+        if(!DBAccess.insertToDB(18,secValues))
+            return false;
         return true;
     }
 
@@ -246,34 +223,12 @@ public class InsertToDB {
         String[] values={referee.getMember().getUser_id(),referee.isActiveStatus()+""};
         if(!DBAccess.insertToDB(24,values))
             return false;
-        for (FootballGame game:referee.GetGames()) {
-            //need to fix!!!!!!!!!!!!!!!!!!!!
-            /*String refUser=referee.getMember().getUser_id();
-            String season=game.getSeason().getYear()+"";
-            String home=game.getHome().getTeamName();
-            String away=game.getAway().getTeamName();
-            String[] secValues={refUser,season,game.getDate().toString(),home,away};
-            if(!DBAccess.insertToDB(25,secValues))
-                return false;
-            */
-        }
         return true;
     }
-
     public boolean addLineRefereeToDB(MainReferee referee){
         String[] values={referee.getMember().getUser_id(),referee.isActiveStatus()+""};
-        if(!DBAccess.insertToDB(25,values))
+        if(!DBAccess.insertToDB(25,values)){
             return false;
-        for (FootballGame game:referee.GetGames()) {
-            //need to fix!!!!!!!!!!!!!!!!!!!!
-            /*String refUser=referee.getMember().getUser_id();
-            String season=game.getSeason().getYear()+"";
-            String home=game.getHome().getTeamName();
-            String away=game.getAway().getTeamName();
-            String[] secValues={refUser,season,game.getDate().toString(),home,away};
-            if(!DBAccess.insertToDB(25,secValues))
-                return false;
-            */
         }
         return true;
     }
@@ -282,46 +237,6 @@ public class InsertToDB {
         String[] values={referee.getMember().getUser_id(),referee.isActiveStatus()+""};
         if(!DBAccess.insertToDB(26,values))
             return false;
-        for (FootballGame game:referee.GetGames()) {
-            //need to fix!!!!!!!!!!!!!!!!!!!!
-            /*String refUser=referee.getMember().getUser_id();
-            String season=game.getSeason().getYear()+"";
-            String home=game.getHome().getTeamName();
-            String away=game.getAway().getTeamName();
-            String[] secValues={refUser,season,game.getDate().toString(),home,away};
-            if(!DBAccess.insertToDB(25,secValues))
-                return false;
-            */
-        }
-        return true;
-    }
-
-    public boolean addPlayerToDB(Player player){
-        String[] values={player.getMember().getUser_id()+"",player.getPosition().ordinal()+"",player.getDateOfBirth().toString(),player.getTeam().getTeamName()};
-        if(!DBAccess.insertToDB(27,values))
-            return false;
-        for (String tweet:player.getTweets()) {
-            String[] secValues={player.getMember().getUser_id(),tweet};
-            if(!DBAccess.insertToDB(28,secValues))
-                return false;
-        }
-        for (Observer observer:player.getObservers()) {
-            String[] secValues={player.getMember().getUser_id(),((Member)observer).getUser_id()+""};
-            if(!DBAccess.insertToDB(29,values))
-                return false;
-        }
-        return true;
-    }
-
-    public boolean addTeamManagerToDB(TeamManager manager){
-        String[] values={manager.getMember().getUser_id(),manager.getJobName(),manager.getTeam().getTeamName()};
-        if(!DBAccess.insertToDB(30,values))
-            return false;
-        for (TeamManager.Permissions permission:manager.getPermissions()) {
-            String[] secValues={manager.getMember().getUser_id(),permission.ordinal()+""};
-            if(!DBAccess.insertToDB(31,secValues))
-                return false;
-        }
         return true;
     }
 
@@ -329,13 +244,43 @@ public class InsertToDB {
         String[] values={owner.getMember().getUser_id(),owner.getTeam().getTeamName()};
         if(!DBAccess.insertToDB(32,values))
             return false;
-        for (Job job:owner.getAppointmentList()) {
-            String[] secValues={owner.getMember().getUser_id(),job.getMember().getUser_id()};
-            if(!DBAccess.insertToDB(18,secValues))
-                return false;
-        }
         return true;
     }
+
+    public boolean addPlayerToDB(Player player){
+        String[] values={player.getMember().getUser_id()+"",player.getPosition().ordinal()+"",player.getDateOfBirth().toString(),player.getTeam().getTeamName()};
+        if(!DBAccess.insertToDB(27,values))
+            return false;
+        return true;
+    }
+
+    public boolean addPlayerTweetToDB(Player player,String tweet){
+        String[] secValues={player.getMember().getUser_id(),tweet};
+        if(!DBAccess.insertToDB(28,secValues))
+            return false;
+        return true;
+    }
+
+    public boolean addPlayerObserverToDB(Player player,Observer observer){
+        String[] secValues={player.getMember().getUser_id(),((Member)observer).getUser_id()+""};
+        if(!DBAccess.insertToDB(29,secValues))
+            return false;
+        return true;
+    }
+    public boolean addTeamManagerToDB(TeamManager manager){
+        String[] values={manager.getMember().getUser_id(),manager.getJobName(),manager.getTeam().getTeamName()};
+        if(!DBAccess.insertToDB(30,values))
+            return false;
+        return true;
+    }
+
+    public boolean addManagerPermissionToDB(TeamManager manager,TeamManager.Permissions permission){
+        String[] secValues={manager.getMember().getUser_id(),permission.ordinal()+""};
+        if(!DBAccess.insertToDB(31,secValues))
+            return false;
+        return true;
+    }
+
 
     public boolean addTicketToDB(Ticket ticket){
         String[] values={ticket.getTicketID(),ticket.getWrittenByID(),ticket.getAnswer(),ticket.getComplaint(),ticket.getIfAnswered()+""};
