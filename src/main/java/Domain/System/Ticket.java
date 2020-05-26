@@ -41,8 +41,11 @@ public class Ticket {
        return Complaint;
     }
 
-    public String getAnswer(String answer){
+    public String getAnswer(){
         return Answer;
     }
 
+    public String getWrittenByID() {
+        return WrittenBy.getUser_id();
+    }
 }

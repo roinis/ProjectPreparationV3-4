@@ -214,5 +214,4 @@ public abstract class User {
         return teamManagerInfo;
     }
 
-
 }

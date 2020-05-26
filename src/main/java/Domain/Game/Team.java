@@ -268,6 +268,10 @@ public class Team implements Subject {
             teamOwner.removeOwner(userName);
     }
 
+    public void setBudget(Budget budget) {
+        this.budget=budget;
+    }
+
     public boolean addWithdraw(Double sum,String description) throws DomainException {
         if(status==Status.close){
             throw new DomainException("the team is close");

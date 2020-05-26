@@ -168,4 +168,12 @@ public class Season {
     public ScoringPolicy getScoringPolicy() {
         return scoringPolicy;
     }
+
+    public void setTable(LinkedList<LeaguePosition> table) {
+        this.table.leagueTable=table;
+    }
+
+    public void addGame(FootballGame currGame) {
+        games.add(currGame);
+    }
 }

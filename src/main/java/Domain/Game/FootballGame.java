@@ -188,4 +188,20 @@ public class FootballGame implements Subject {
     public void setVarReferee(VarReferee varReferee) {
         this.varReferee = varReferee;
     }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public LinkedList<Event> getEvents() {
+        return events;
+    }
+
+    public int getHomeGoals() {
+        return homeGoals;
+    }
+
+    public int getAwayGoals() {
+        return awayGoals;
+    }
 }

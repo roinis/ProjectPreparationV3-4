@@ -12,6 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Job implements Subject {
+    public Player.Position getPosition() {
+        return position;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
     public enum Position{ST,CF,CAM,LM,CM,RM,CDM,RW,LW,RB,LB,CB,GK}
     private Position position;
     private Team team;

@@ -112,4 +112,7 @@ public class Referee extends Job{
         //Game.AddEvent();
     }
 
+    public boolean isActiveStatus() {
+        return ActiveStatus;
+    }
 }

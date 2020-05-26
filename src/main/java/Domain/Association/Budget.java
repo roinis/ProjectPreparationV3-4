@@ -34,6 +34,22 @@ public class Budget {
         checkBudgetException();
     }
 
+    public void addWithdraw(Double sum,String description,LocalDateTime dateTime){
+        budget-=sum;
+        Pair<Double,String> record=new Pair(sum,description);
+        Pair<LocalDateTime,Pair<Double,String>> report=new Pair<>(dateTime,record);
+        reports.add(report);
+        checkBudgetException();
+    }
+
+    public void addDeposit(Double sum,String description,LocalDateTime dateTime){
+        budget+=sum;
+        Pair<Double,String> record=new Pair(sum,description);
+        Pair<LocalDateTime,Pair<Double,String>> report=new Pair<>(dateTime,record);
+        reports.add(report);
+        checkBudgetException();
+    }
+
     private void checkBudgetException() {
         /*if(false)
             team.notifyObserver(new BudgetExceptionEvent(budget,excp,team));*/

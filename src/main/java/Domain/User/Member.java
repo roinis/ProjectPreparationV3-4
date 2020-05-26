@@ -242,4 +242,28 @@ public class Member extends User implements Observer {
         searchHistory.add(category);
         return SearchByCategory(choice);
     }
+
+    public void followTeam(Team team) {
+        teamsFollowed.add(team);
+    }
+
+    public boolean isBlocked() {
+        return  blocked;
+    }
+
+    public List<String> getSearchHistory() {
+        return searchHistory;
+    }
+
+    public List<Team> getTeamsFollowed() {
+        return teamsFollowed;
+    }
+
+    public List<Player> getPlayersFollowed() {
+        return playersFollowed;
+    }
+
+    public List<Coach> getCoachesFollowed() {
+        return coachesFollowed;
+    }
 }

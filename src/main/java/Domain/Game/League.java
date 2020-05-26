@@ -4,6 +4,7 @@ import  Domain.User.*;
 import  Domain.System.*;
 import  Domain.Jobs.*;
 import  Domain.Association.*;
+import Exceptions.DomainException;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
@@ -171,5 +172,16 @@ public class League {
             addLinesManReferee((LinesManReferee) refToAdd);
         if(refToAdd instanceof VarReferee)
             addVarReferee((VarReferee) refToAdd);
+    }
+
+    public void addSeason(Season currSeason) throws DomainException {
+        for (Season existingSeason:seasons) {
+            if(currSeason.getYear()==existingSeason.getYear())
+                throw  new DomainException("reloading from db error. season already exist");
+        }
+    }
+
+    public List<Season>  getAllSeasons() {
+        return seasons;
     }
 }
