@@ -4,7 +4,6 @@ import  Domain.User.*;
 import  Domain.System.*;
 import  Domain.Jobs.*;
 import  Domain.Association.*;
-import  Domain.Events.*;
 import Exceptions.DomainException;
 
 import java.util.ArrayList;
@@ -42,7 +41,8 @@ public class Team implements Subject {
         owners.add(owner);
         jobsObservers.add(owner.getMember());
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        alphaSystem.AddtoDB(4,this);
+        alphaSystem.AddtoMemory(4,this);
+        alphaSystem.getDB().insert(this);
     }
 
     public List<Observer> getJobsObservers() {
@@ -93,6 +93,7 @@ public class Team implements Subject {
         jobsObservers.add(teamOwner.getMember());
         owners.add(teamOwner);
         notifyObserver(new NewNominationEvent(this,teamOwner.getMember(),"Team owner"));
+        AlphaSystem.getSystem().getDB().addTeamOwnerToTeamInDB(teamOwner,this);
         return true;
     }
 
@@ -122,6 +123,7 @@ public class Team implements Subject {
         jobsObservers.add(teamManager.getMember());
         managers.add(teamManager);
         notifyObserver(new NewNominationEvent(this,teamManager.getMember(),"Team manager"));
+        AlphaSystem.getSystem().getDB().addManagerToTeamInDB(teamManager,this);
         return true;
     }
 
@@ -206,7 +208,8 @@ public class Team implements Subject {
         if(status==Status.close){
             throw new DomainException("the team is close");
         }
-            fanObservers.add(newObserver);
+        fanObservers.add(newObserver);
+        AlphaSystem.getSystem().getDB().addFanToTeamInDB(this,(Member) newObserver);
     }
 
     @Override
@@ -319,13 +322,14 @@ public class Team implements Subject {
 
         }
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        Player player = (Player) alphaSystem.GetSpecificFromDB(7, userName);
+        Player player = (Player) alphaSystem.GetSpecificFromMemory(7, userName);
         if(player==null){
             return false;
         }
         if(player.addToTeam(this)) {
             players.add(player);
             notifyObserver(new AddPlayerToTeamEvent(player,this));
+            AlphaSystem.getSystem().getDB().addPlayerToTeamInDB(player,this);
             return true;
         }else return false;
     }
@@ -389,13 +393,14 @@ public class Team implements Subject {
 
         }
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        Coach coach = (Coach) alphaSystem.GetSpecificFromDB(3, userName);
+        Coach coach = (Coach) alphaSystem.GetSpecificFromMemory(3, userName);
         if(coach==null){
             return false;
         }
         if(coach.addToTeam(this,job)) {
             coaches.add(coach);
             notifyObserver(new AddCoachToTeamEvent(coach,this));
+            AlphaSystem.getSystem().getDB().addCoachToTeamInDB(coach,this);
             return true;
         }else return false;
     }
@@ -480,7 +485,7 @@ public class Team implements Subject {
 
         }
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        Stadium stadium= (Stadium) alphaSystem.GetSpecificFromDB(11,stadiumName);
+        Stadium stadium= (Stadium) alphaSystem.GetSpecificFromMemory(11,stadiumName);
         if(stadium==null)
             return false;
         setHomeStadium(stadium);

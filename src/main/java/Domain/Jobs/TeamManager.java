@@ -1,13 +1,10 @@
 package Domain.Jobs;
-import Domain.Events.*;
 import Domain.User.*;
 import Domain.System.*;
 import Domain.Game.*;
-import Domain.Association.*;
 import Exceptions.DomainException;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class TeamManager extends Job {
     private Team team;
@@ -20,7 +17,8 @@ public class TeamManager extends Job {
         this.jobName="manager";
         this.permissions=permissions;
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        alphaSystem.AddtoDB(5,this);
+        alphaSystem.AddtoMemory(5,this);
+        alphaSystem.getDB().insert(this);
     }
 
     public Team getTeam() {

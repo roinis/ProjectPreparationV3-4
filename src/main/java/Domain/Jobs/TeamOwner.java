@@ -1,15 +1,11 @@
 package Domain.Jobs;
-import Domain.Events.*;
 import Domain.User.*;
 import Domain.System.*;
 import Domain.Game.*;
-import Domain.Association.*;
 import Exceptions.DomainException;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class TeamOwner extends Job{
     private Team team;
@@ -21,12 +17,13 @@ public class TeamOwner extends Job{
         appointmentList =new ArrayList<>();
         this.jobName="owner";
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        alphaSystem.AddtoDB(6,this);
+        alphaSystem.AddtoMemory(6,this);
+        alphaSystem.getDB().insert(this);
     }
 
     public void addOwner(String userName) throws DomainException {
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        Member member= (Member) alphaSystem.GetSpecificFromDB(2,userName);
+        Member member= (Member) alphaSystem.GetSpecificFromMemory(2,userName);
         if(checker(member))
             return;
         if(member.getJob("owner")!=null){
@@ -36,13 +33,14 @@ public class TeamOwner extends Job{
         if(team.addOwner(newOwner)) {
             member.addJob(newOwner);
             appointmentList.add(newOwner);
-            System.out.println("the member " + userName + " add to " + team.getTeamName() + " team owners");
+            //System.out.println("the member " + userName + " add to " + team.getTeamName() + " team owners");
+            AlphaSystem.getSystem().getDB().addAppointmentToOwnerInDB(this,newOwner);
         }
     }
 
     public void removeOwner(String userName) throws DomainException {
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        Member member= (Member) alphaSystem.GetSpecificFromDB(2,userName);
+        Member member= (Member) alphaSystem.GetSpecificFromMemory(2,userName);
         if(checker(member))
             return;
         TeamOwner teamOwner=(TeamOwner)member.getJob("owner");
@@ -68,7 +66,7 @@ public class TeamOwner extends Job{
 
     public void addManager(String userName,boolean[] permissionsList) throws DomainException {
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        Member member= (Member) alphaSystem.GetSpecificFromDB(2,userName);
+        Member member= (Member) alphaSystem.GetSpecificFromMemory(2,userName);
         if(checker(member))
             return;
         if(member.getJob("manager")!=null){
@@ -82,13 +80,17 @@ public class TeamOwner extends Job{
         if(team.addManager(teamManager)) {
             member.addJob(teamManager);
             appointmentList.add(teamManager);
-            System.out.println("the member " + userName + " add to " + team.getTeamName() + " team managers");
+            //System.out.println("the member " + userName + " add to " + team.getTeamName() + " team managers");
+            AlphaSystem.getSystem().getDB().addAppointmentToOwnerInDB(this,teamManager);
+            for (TeamManager.Permissions per:permissions) {
+                AlphaSystem.getSystem().getDB().addManagerPermissionToDB(teamManager,per);
+            }
         }
     }
 
     public void removeManger(String userName) throws DomainException {
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        Member member= (Member) alphaSystem.GetSpecificFromDB(2,userName);
+        Member member= (Member) alphaSystem.GetSpecificFromMemory(2,userName);
         if(checker(member))
             return;
         TeamManager teamManager=(TeamManager) member.getJob("manager");

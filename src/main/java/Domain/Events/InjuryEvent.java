@@ -6,11 +6,12 @@ import Domain.Game.*;
 import Domain.Association.*;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class InjuryEvent extends GameEvent {
 
 
-    public InjuryEvent(Time eventGameTime, Team team, Player player) {
+    public InjuryEvent(LocalDateTime eventGameTime, Team team, Player player) {
         super(eventGameTime, team, player);
     }
 

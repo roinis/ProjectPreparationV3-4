@@ -46,7 +46,7 @@ public class AssociationController {
     }
 
     public void NewLeague(String Username, String LeagueName) throws DomainException {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new DomainException("No such username exists");
         }
@@ -54,7 +54,7 @@ public class AssociationController {
     }
 
     public void AddSeasonToLeague(String Username, String LeagueName, int year ) throws DomainException {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new DomainException("No such username exists");
         }
@@ -62,7 +62,7 @@ public class AssociationController {
     }
 
     public void AddNewTeam(String Username, String TeamName, Member teamOwner, Stadium HomeStadium ) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -72,7 +72,7 @@ public class AssociationController {
 
     // to be continued
     public void AddNewRef(String Username,Member member) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -80,7 +80,7 @@ public class AssociationController {
     }
 
     public void AddRefToLeague(String Username,Referee RefToAdd, League league) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -88,7 +88,7 @@ public class AssociationController {
     }
 
     public boolean AddPlayerJobToMember(String username, Member member, Player.Position pos, LocalDate dateOfBirth) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -96,7 +96,7 @@ public class AssociationController {
     }
 
     public boolean AddCoachJobToMember(String username,Member member, Coach.Certification certification) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -104,7 +104,7 @@ public class AssociationController {
     }
 
     public void ChangeScoringPolicyForLeague(String Username,String LeagueToChange, int pPerWin,int pPerLoss,int pPerDraw) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -112,7 +112,7 @@ public class AssociationController {
     }
 
     public void ChangeSchedulingPolicyForLeague(String Username, String LeagueToChange, int numOfMatches) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -120,7 +120,7 @@ public class AssociationController {
     }
 
     public boolean ChangeScoringPolicyForSeason(String Username, String LeagueToChange,int year, int pPerWin,int pPerLoss,int pPerDraw) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -128,7 +128,7 @@ public class AssociationController {
     }
 
     public boolean ChangeSchedulingPolicyForSeason(String Username, String LeagueToChange,int year, int numOfMatches) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
@@ -136,7 +136,7 @@ public class AssociationController {
     }
 
     public boolean AddTeamToSeasonInLeague(String Username, String LeagueName, int seasonYear,Team team ) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(8,Username);
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }

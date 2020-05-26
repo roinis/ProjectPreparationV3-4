@@ -101,13 +101,17 @@ public class SQLServerDBAccess {
     public String[][] getAllTickets() {
         return null;
     }
+
+    public String[][] getGamesFouls(String s, String homeTeamName, String awayTeamName) {
+        return null;
+    }
 }
 
 /*
  * 1 -league
  * 2 -season
  * 3 -game
- * 4 -
+ * 4 -associationMember
  * 5 -main ref to season
  * 6 -lineRef to season
  * 7 -varRef to season

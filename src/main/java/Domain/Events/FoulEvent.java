@@ -5,11 +5,12 @@ import Domain.Jobs.*;
 import Domain.Game.*;
 import Domain.Association.*;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class FoulEvent extends GameEvent {
     Player fouledPlayer;
 
-    public FoulEvent(Time eventGameTime, Team team, Player player, Player fouledPlayer) {
+    public FoulEvent(LocalDateTime eventGameTime, Team team, Player player, Player fouledPlayer) {
         super(eventGameTime, team, player);
         this.fouledPlayer = fouledPlayer;
     }

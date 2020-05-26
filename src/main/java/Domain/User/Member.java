@@ -3,11 +3,9 @@ import Domain.Events.*;
 import Domain.System.Observer;
 import Domain.Jobs.*;
 import Domain.Game.*;
-import Domain.Association.*;
 import Domain.System.*;
 
 
-import java.io.*;
 import java.util.*;
 
 public class Member extends User implements Observer {
@@ -160,8 +158,9 @@ public class Member extends User implements Observer {
 
     public void newComplaint(String complaint){
         Ticket ticket = new Ticket(this,complaint);
-        AlphaSystem.getSystem().AddtoDB(10,ticket);
+        AlphaSystem.getSystem().AddtoMemory(10,ticket);
         this.ticketList.add(ticket);
+        AlphaSystem.getSystem().getDB().addMemberTicketToDB(this,ticket);
     }
 
     public List<Ticket> getTicketList(){
@@ -177,7 +176,7 @@ public class Member extends User implements Observer {
 
 
     public boolean followFootballGame(String league_name,String home_team,String away_team){
-        League chosenLeague = (League) AlphaSystem.getSystem().GetSpecificFromDB(1,league_name);
+        League chosenLeague = (League) AlphaSystem.getSystem().GetSpecificFromMemory(1,league_name);
         if(chosenLeague!=null) {
             Season currSeason = chosenLeague.getCurrentSeason();
             List<FootballGame> footballGames = currSeason.getGames();
@@ -195,19 +194,19 @@ public class Member extends User implements Observer {
     public boolean followPersonalPage(int type,String object_name) throws Exception {
         switch (type){
             case 1:
-                Team team = (Team) AlphaSystem.getSystem().GetSpecificFromDB(4,object_name);
+                Team team = (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,object_name);
                 if(team==null)
                     return false;
                 team.register(this);
                 return true;
             case 2:
-                Player player = (Player) AlphaSystem.getSystem().GetSpecificFromDB(7,object_name);
+                Player player = (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,object_name);
                 if(player==null)
                     return false;
                 player.register(this);
                 return true;
             case 3:
-                Coach coach = (Coach) AlphaSystem.getSystem().GetSpecificFromDB(3,object_name);
+                Coach coach = (Coach) AlphaSystem.getSystem().GetSpecificFromMemory(3,object_name);
                 if(coach==null)
                     return false;
                 coach.register(this);
@@ -218,6 +217,7 @@ public class Member extends User implements Observer {
 
     public List<Object> memberSearchByName(String name,boolean leagueBool,boolean coachBool,boolean teamBool,boolean manBool,boolean ownerBool,boolean playerBool,boolean refBool,boolean stadBool){
         searchHistory.add(name);
+        AlphaSystem.getSystem().getDB().addMemberSearchToDB(this,name);
         return searchByName( name, leagueBool, coachBool, teamBool, manBool, ownerBool, playerBool, refBool, stadBool);
     }
 
@@ -245,6 +245,7 @@ public class Member extends User implements Observer {
 
     public void followTeam(Team team) {
         teamsFollowed.add(team);
+        AlphaSystem.getSystem().getDB().addMemberTeamFollowed(this,team);
     }
 
     public boolean isBlocked() {

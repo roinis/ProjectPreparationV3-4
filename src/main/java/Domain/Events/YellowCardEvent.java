@@ -5,10 +5,11 @@ import Domain.Jobs.*;
 import Domain.Game.*;
 import Domain.Association.*;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class YellowCardEvent extends GameEvent {
 
-    public YellowCardEvent(Time eventGameTime, Team team, Player player) {
+    public YellowCardEvent(LocalDateTime eventGameTime, Team team, Player player) {
         super(eventGameTime, team, player);
     }
 

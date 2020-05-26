@@ -1,11 +1,5 @@
 package Domain.Game;
-import  Domain.Events.*;
-import Domain.User.*;
 import  Domain.System.*;
-import  Domain.Jobs.*;
-import  Domain.Association.*;
-
-import java.util.Scanner;
 
 public class Stadium {
 
@@ -16,7 +10,9 @@ public class Stadium {
         this.stadiumName=stadiumName;
         this.city=city;
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        alphaSystem.AddtoDB(11,this);
+        alphaSystem.AddtoMemory(11,this);
+        alphaSystem.getDB().insert(this);
+
     }
 
     public String getStadiumName() {

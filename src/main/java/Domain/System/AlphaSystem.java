@@ -1,29 +1,28 @@
 package Domain.System;
 import Domain.Events.*;
 import Domain.User.*;
-import Domain.Jobs.*;
-import Domain.Game.*;
-import Domain.Association.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlphaSystem {
-    private static AlphaDatabase DB;
+    private static AlphaMemory memory;
     private static AlphaSystem system;
     private List<SystemAdmin> Admins;
     private Login LoginSys;
     private Register RegisterSys;
     private List<Member> LoggedInMembers;
+    private InsertToDB DB;
 
 
 
     private  AlphaSystem(){
-        DB = new AlphaDatabase();
+        memory = new AlphaMemory();
         LoginSys = new Login();
         RegisterSys = new Register();
         LoggedInMembers = new ArrayList<Member>();
         Admins = new ArrayList<SystemAdmin>();
+        DB=new InsertToDB();
     }
 
     public static AlphaSystem  getSystem(){
@@ -33,8 +32,9 @@ public class AlphaSystem {
         return system;
     }
 
-    public void ResetDB(){
-        DB.Reset();
+    public InsertToDB getDB(){return DB;}
+    public void ResetMemory(){
+        memory.Reset();
     }
 
     public void AddAdmin(SystemAdmin Admin){
@@ -86,43 +86,32 @@ public class AlphaSystem {
         //member.logout();
     }
 
-
-
-    /*
-      Leagues;  //1
-   Members; //2
-    Coaches; //3
-    Teams;  //4
-   TeamManagers; //5
-    TeamOwners; //6
-
-     */
-    public  Object GetSpecificFromDB(int Type, String Name)
+    public  Object GetSpecificFromMemory(int Type, String Name)
     {
-        return DB.Getspecific(Type,Name);
+        return memory.Getspecific(Type,Name);
     }
 
-    public  Object GetAllFromDB(int Type)
+    public  Object GetAllFromMemory(int Type)
     {
-        return DB.GetAll(Type);
+        return memory.GetAll(Type);
     }
 
-    public void AddtoDB(int Type, Object ToAdd)
+    public void AddtoMemory(int Type, Object ToAdd)
     {
-        DB.AddtoDB(Type,ToAdd);
+        memory.AddtoMeamory(Type,ToAdd);
     }
 
     public  void RemoveMember(Member member)
     {
-        DB.RemoveMember(member);
+        memory.RemoveMember(member);
     }
 
     public Ticket GetNextUnansweredTicket() {
-        return DB.GetNextUnansweredTicket();
+        return memory.GetNextUnansweredTicket();
     }
 
     public EventLog getLog() {
-        return DB.GetLog();
+        return memory.GetLog();
     }
 
     public Member Login(String user_name, String password){

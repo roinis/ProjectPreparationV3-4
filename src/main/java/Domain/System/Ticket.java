@@ -1,9 +1,5 @@
 package Domain.System;
-import Domain.Events.*;
 import Domain.User.*;
-import Domain.Jobs.*;
-import Domain.Game.*;
-import Domain.Association.*;
 
 public class Ticket {
     static int ID;
@@ -20,7 +16,7 @@ public class Ticket {
         TicketID = Integer.toString(ID);
         ID++;
         AlphaSystem system = AlphaSystem.getSystem();
-        system.AddtoDB(10, this);
+        system.AddtoMemory(10, this);
     }
 
     public String getTicketID(){

@@ -17,14 +17,14 @@ public class LeagueTable {
         this.leagueTable=new LinkedList();
     }
 
-    public boolean addTeam(Team team) {
+    public LeaguePosition addTeam(Team team) {
         for (LeaguePosition position:leagueTable) {
             if(position.getTeam().equals(team))
-                return false;
+                return null;
         }
         LeaguePosition newPosition=new LeaguePosition(team,0,0,0,0,0);
         leagueTable.add(newPosition);
-        return true;
+        return newPosition;
     }
     public void addWin(Team team, int goalsScored, int goalsReceived){
         for (LeaguePosition position:leagueTable) {

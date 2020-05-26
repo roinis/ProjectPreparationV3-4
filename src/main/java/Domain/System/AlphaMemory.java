@@ -8,7 +8,7 @@ import Domain.Association.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlphaDatabase {
+public class AlphaMemory {
     List<League> Leagues;  //1
     List<Member> Members; //2
     List<Coach> Coaches; //3
@@ -23,7 +23,7 @@ public class AlphaDatabase {
     private EventLog Log;
 
 
-    public AlphaDatabase(){
+    public AlphaMemory(){
         Leagues = new ArrayList<League>();
         Members = new ArrayList<Member>();
         Coaches = new ArrayList<Coach>();
@@ -230,7 +230,7 @@ public class AlphaDatabase {
         return null;
     }
 
-    public void AddtoDB(int Type, Object ToAdd) {
+    public void AddtoMeamory(int Type, Object ToAdd) {
         switch (Type) {
             case 1:
                if(ToAdd instanceof League)

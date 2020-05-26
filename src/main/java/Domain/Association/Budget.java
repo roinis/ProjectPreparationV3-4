@@ -1,6 +1,7 @@
 package Domain.Association;
 
 import Domain.Game.*;
+import Domain.System.AlphaSystem;
 import javafx.util.Pair;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Budget {
         Pair<LocalDateTime,Pair<Double,String>> report=new Pair<>(LocalDateTime.now(),record);
         reports.add(report);
         checkBudgetException();
+        AlphaSystem.getSystem().getDB().addBudgetTransactionInDB(team,report);
     }
 
     public void addDeposit(Double sum,String description){
@@ -32,6 +34,7 @@ public class Budget {
         Pair<LocalDateTime,Pair<Double,String>> report=new Pair<>(LocalDateTime.now(),record);
         reports.add(report);
         checkBudgetException();
+        AlphaSystem.getSystem().getDB().addBudgetTransactionInDB(team,report);
     }
 
     public void addWithdraw(Double sum,String description,LocalDateTime dateTime){
@@ -40,6 +43,7 @@ public class Budget {
         Pair<LocalDateTime,Pair<Double,String>> report=new Pair<>(dateTime,record);
         reports.add(report);
         checkBudgetException();
+        AlphaSystem.getSystem().getDB().addBudgetTransactionInDB(team,report);
     }
 
     public void addDeposit(Double sum,String description,LocalDateTime dateTime){
@@ -48,6 +52,7 @@ public class Budget {
         Pair<LocalDateTime,Pair<Double,String>> report=new Pair<>(dateTime,record);
         reports.add(report);
         checkBudgetException();
+        AlphaSystem.getSystem().getDB().addBudgetTransactionInDB(team,report);
     }
 
     private void checkBudgetException() {

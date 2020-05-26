@@ -7,6 +7,7 @@ import  Domain.Association.*;
 
 import  Domain.Game.*;
 import  Domain.Jobs.LinesManReferee;
+import Exceptions.DomainException;
 import javafx.util.Pair;
 
 import java.time.LocalDateTime;
@@ -88,10 +89,11 @@ public class Season {
         }
     }
 
-    public boolean addTeamToSeason(Team team){
-        if(table.addTeam(team))
-            return true;
-        return false;
+    public LeaguePosition addTeamToSeason(Team team) throws DomainException {
+        LeaguePosition position=table.addTeam(team);
+        if(table.addTeam(team)==null)
+            throw new DomainException("this team already plays in this season");
+        return position;
     }
 
     public int getYear() {
@@ -127,7 +129,7 @@ public class Season {
     }
 
 
-    public void scheduleGames(){
+    public void scheduleGames(String leagueName){
         LinkedList<Team> teams = table.getAllTeams();
         for (int i=0;i<schedulingPolicy.getNumOf2TeamsGames();i++){
             LinkedList<Team> usedTeames=new LinkedList();
@@ -135,7 +137,7 @@ public class Season {
                 Team home=teams.removeFirst();
                 for (Team away:teams) {
                     FootballGame newGame=new FootballGame(this,home,away,genterateRandomDate(year));
-                    games.add(newGame);
+                    addGame(newGame,leagueName);
                 }
                 usedTeames.addFirst(home);
             }
@@ -173,7 +175,12 @@ public class Season {
         this.table.leagueTable=table;
     }
 
-    public void addGame(FootballGame currGame) {
+    public void addGame(FootballGame currGame,String leagueName) {
         games.add(currGame);
+        try {
+            AlphaSystem.getSystem().getDB().addGameToDB(currGame,getYear()+"",leagueName);
+        } catch (DomainException e) {
+            e.printStackTrace();
+        }
     }
 }

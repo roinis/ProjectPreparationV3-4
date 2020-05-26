@@ -4,6 +4,7 @@ import Domain.Game.*;
 import Domain.User.*;
 import Domain.System.*;
 import Domain.Jobs.*;
+import Exceptions.DomainException;
 
 
 import java.time.LocalDate;
@@ -18,12 +19,12 @@ public class AssociationMember extends Member {
     public void NewLeague(String LeagueName){
         //should be in League
         AlphaSystem system = AlphaSystem.getSystem();
-        system.AddtoDB(1,new League(LeagueName,new SchedulingPolicy(),new ScoringPolicy()));
+        system.AddtoMemory(1,new League(LeagueName,new SchedulingPolicy(),new ScoringPolicy()));
     }
 
     public void AddSeasonToLeague(String LeagueName, int year ){
         AlphaSystem system = AlphaSystem.getSystem();
-        League CurrLeague = (League)system.GetSpecificFromDB(1,LeagueName);
+        League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueName);
         CurrLeague.addSeason(year, CurrLeague.getSchedulingPolicy(), CurrLeague.getScoringPolicy());
     }
 
@@ -50,19 +51,19 @@ public class AssociationMember extends Member {
 
     public void ChangeScoringPolicyForLeague(String LeagueToChange, int pPerWin,int pPerLoss,int pPerDraw){
         AlphaSystem system = AlphaSystem.getSystem();
-        League CurrLeague = (League)system.GetSpecificFromDB(1,LeagueToChange);
+        League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
         CurrLeague.setScoringPolicy(pPerWin,pPerLoss,pPerDraw);
     }
 
     public void ChangeSchedulingPolicyForLeague(String LeagueToChange, int numOfMatches){
         AlphaSystem system = AlphaSystem.getSystem();
-        League CurrLeague = (League)system.GetSpecificFromDB(1,LeagueToChange);
+        League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
         CurrLeague.setSchedulingPolicy(numOfMatches);
     }
 
     public boolean ChangeScoringPolicyForSeason(String LeagueToChange,int year, int pPerWin,int pPerLoss,int pPerDraw){
         AlphaSystem system = AlphaSystem.getSystem();
-        League CurrLeague = (League)system.GetSpecificFromDB(1,LeagueToChange);
+        League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
         if(CurrLeague.setSeasonScoringPolicy(year,pPerWin,pPerLoss,pPerDraw))
             return true;
         return false;
@@ -70,18 +71,21 @@ public class AssociationMember extends Member {
 
     public boolean ChangeSchedulingPolicyForSeason(String LeagueToChange,int year, int numOfMatches){
         AlphaSystem system = AlphaSystem.getSystem();
-        League CurrLeague = (League)system.GetSpecificFromDB(1,LeagueToChange);
+        League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
         if(CurrLeague.setSeasonSchedulingPolicy(year,numOfMatches))
             return true;
         return false;
     }
 
-    public boolean AddTeamToSeasonInLeague(String LeagueName, int seasonYear,Team team ){
+    public void AddTeamToSeasonInLeague(String LeagueName, int seasonYear,Team team ){
         AlphaSystem system = AlphaSystem.getSystem();
-        League CurrLeague = (League)system.GetSpecificFromDB(1,LeagueName);
-        if(CurrLeague.getSpecSeason(seasonYear).addTeamToSeason(team))
-            return true;
-        return false;
+        League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueName);
+        try {
+            LeaguePosition position=CurrLeague.getSpecSeason(seasonYear).addTeamToSeason(team);
+            AlphaSystem.getSystem().getDB().addLeaguePositionToDB(position,seasonYear+"",LeagueName);
+        } catch (DomainException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean AddPlayerJobToMember(Member member, Player.Position pos, LocalDate dateOfBirth){

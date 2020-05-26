@@ -6,13 +6,14 @@ import Domain.Game.*;
 import Domain.Association.*;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public abstract class GameEvent implements Event {
-    Time eventGameTime;
+    LocalDateTime eventGameTime;
     Team eventTeam;
     Player eventPlayer;
 
-    public GameEvent(Time eventGameTime, Team team, Player player) {
+    public GameEvent(LocalDateTime eventGameTime, Team team, Player player) {
         this.eventGameTime = eventGameTime;
         eventTeam = team;
         eventPlayer = player;
@@ -23,11 +24,11 @@ public abstract class GameEvent implements Event {
         AlphaSystem.getSystem().getLog().addEvent(this);
     }
 
-    public Time getEventGameTime() {
+    public LocalDateTime getEventGameTime() {
         return eventGameTime;
     }
 
-    public void setEventGameTime(Time eventGameTime) {
+    public void setEventGameTime(LocalDateTime eventGameTime) {
         this.eventGameTime = eventGameTime;
     }
 

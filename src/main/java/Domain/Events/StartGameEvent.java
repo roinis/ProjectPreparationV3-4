@@ -5,6 +5,7 @@ import Domain.Jobs.*;
 import Domain.Game.*;
 import Domain.Association.*;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class StartGameEvent implements Event {
 
@@ -12,7 +13,7 @@ public class StartGameEvent implements Event {
     private Team homeTeam;
     private Team awayTeam;
 
-    public StartGameEvent(Time eventGameTime, Team homeTeam, Team awayTeam) {
+    public StartGameEvent(LocalDateTime eventGameTime, Team homeTeam, Team awayTeam) {
         this.eventGameTime = eventGameTime;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;

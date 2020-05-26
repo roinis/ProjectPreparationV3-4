@@ -1,14 +1,5 @@
 package Domain.System;//roei cohen
-import Domain.Events.*;
 import Domain.User.*;
-import Domain.Jobs.*;
-import Domain.Game.*;
-import Domain.Association.*;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
 
 public class Register {
 
@@ -27,10 +18,11 @@ public class Register {
     }
 
     public boolean registerToSystem(String user_name,String password,String user_id,String full_name){
-        Member register_member = (Member)AlphaSystem.getSystem().GetSpecificFromDB(2,user_name);
+        Member register_member = (Member)AlphaSystem.getSystem().GetSpecificFromMemory(2,user_name);
         if(register_member==null){
             Member new_Member = new Member(user_name,password,user_id,full_name);
-            AlphaSystem.getSystem().AddtoDB(2,new_Member);
+            AlphaSystem.getSystem().AddtoMemory(2,new_Member);
+            AlphaSystem.getSystem().getDB().insert(this);
             return true;
         }
         return false;

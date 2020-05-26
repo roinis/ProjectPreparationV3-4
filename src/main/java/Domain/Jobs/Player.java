@@ -3,7 +3,6 @@ import Domain.Events.*;
 import Domain.User.*;
 import Domain.System.*;
 import Domain.Game.*;
-import Domain.Association.*;
 
 import Domain.Events.TewwtEvent;
 
@@ -37,7 +36,8 @@ public class Player extends Job implements Subject {
         tweets=new ArrayList<>();
         observers=new ArrayList<>();
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        alphaSystem.AddtoDB(7,this);
+        alphaSystem.AddtoMemory(7,this);
+        alphaSystem.getDB().insert(this);
     }
 
     public Team getTeam() {
@@ -59,6 +59,7 @@ public class Player extends Job implements Subject {
     public void addTweet(String tweet){
         tweets.add(tweet);
         notifyObserver(new TewwtEvent(tweet));
+        AlphaSystem.getSystem().getDB().addPlayerTweetToDB(this,tweet);
     }
 
     public void deleteTweet(int index){
@@ -68,6 +69,7 @@ public class Player extends Job implements Subject {
     @Override
     public void register(Observer newObserver) {
         observers.add(newObserver);
+        AlphaSystem.getSystem().getDB().addPlayerObserverToDB(this,newObserver);
     }
 
     @Override

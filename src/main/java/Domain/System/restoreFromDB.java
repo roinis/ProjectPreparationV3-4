@@ -2,6 +2,7 @@ package Domain.System;
 
 import Domain.Association.*;
 import Domain.DBAccess.SQLServerDBAccess;
+import Domain.Events.FoulEvent;
 import Domain.Game.*;
 import Domain.Jobs.*;
 import Domain.User.*;
@@ -110,7 +111,7 @@ public class restoreFromDB {
     private void restoreTeamOwners(Team team){
         String[][] owners=database.getTeamOwners(team.getTeamName());
         for (String[] ownerValues:owners) {
-            Member member=(Member) system.GetSpecificFromDB(2,ownerValues[0]);
+            Member member=(Member) system.GetSpecificFromMemory(2,ownerValues[0]);
             TeamOwner owner=new TeamOwner(member);
             owner.setTeam(team);
             try {
@@ -123,7 +124,7 @@ public class restoreFromDB {
         for (TeamOwner owner:OwnersList) {
             String[][] appointments=database.getOwnersAppointments(owner.getMember().getUser_id());
             for (String[] appointment:appointments){
-                TeamOwner nomination=(TeamOwner) system.GetSpecificFromDB(6,appointment[1]);
+                TeamOwner nomination=(TeamOwner) system.GetSpecificFromMemory(6,appointment[1]);
                 if (nomination!=null) {
                     try {
                         owner.addOwner(appointment[1]);
@@ -132,16 +133,28 @@ public class restoreFromDB {
                     }
                 }
                 else{
-                    ///add manager??????
+                    ///ad(d manager??????
                 }
             }
+        }
+    }
+
+    private void restoreFoulEvent(FootballGame game){
+        String[][] foulEvents=database.getGamesFouls(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:foulEvents){
+            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
+            Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
+            Player eventFouledPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[6]);
+            FoulEvent foulEvent=new FoulEvent(dateTime,team,eventPlayer,eventFouledPlayer);
+            game.addEventFromDB(foulEvent);
         }
     }
 
     private void restoreTeamPlayers(Team team) {
         String[][] players=database.getTeamPlayers(team.getTeamName());
         for (String[] playerValues:players) {
-            Player player=(Player)system.GetSpecificFromDB(7,playerValues[1]);
+            Player player=(Player)system.GetSpecificFromMemory(7,playerValues[1]);
             player.addToTeam(team);
             try {
                 team.addNewPlayer(player.getMember().getUser_id());
@@ -154,7 +167,7 @@ public class restoreFromDB {
     private void restoreTeamCoaches(Team team){
         String[][] coaches=database.getTeamCoaches(team.getTeamName());
         for (String[] coachValues:coaches) {
-            Coach coach=(Coach) system.GetSpecificFromDB(3,coachValues[1]);
+            Coach coach=(Coach) system.GetSpecificFromMemory(3,coachValues[1]);
             coach.addToTeam(team,coach.getJobInTheTeam());
             try {
                 team.addNewCoach(coach.getMember().getUser_id(),coach.getJobInTheTeam());
@@ -167,7 +180,7 @@ public class restoreFromDB {
     private void restoreTeamsFans(Team team){
         String[][] fans=database.getTeamsFans(team.getTeamName());
         for (String[] fanValue:fans){
-            Member member=(Member)system.GetSpecificFromDB(2,fanValue[1]);
+            Member member=(Member)system.GetSpecificFromMemory(2,fanValue[1]);
             try {
                 team.register(member);
             } catch (DomainException e) {
@@ -180,10 +193,11 @@ public class restoreFromDB {
     private void restoreTeamsJobObservers(Team team){
         String[][] wanted=database.getTeamJobObservers(team.getTeamName());
         for (String[] observerValues:wanted){
-            Member member=(Member)system.GetSpecificFromDB(2,observerValues[1]);
+            Member member=(Member)system.GetSpecificFromMemory(2,observerValues[1]);
             //member.followTeam(team);//need fix
         }
     }
+
 
     private void restoreLeagues(){
         String[][] leagues=database.getAllLeagues();
@@ -193,7 +207,7 @@ public class restoreFromDB {
             for (String[] seasonValues:seasons){
                 Season currSeason= createSeason(seasonValues);
                 try {
-                    currLeage.addSeason(currSeason);
+                    currLeage.addSeasonFromDB(currSeason);
                 } catch (DomainException e) {
                     e.printStackTrace();
                 }
@@ -207,7 +221,7 @@ public class restoreFromDB {
                 String[][] games=database.getFootballGames(currLeage.getName(),currSeason.getYear()+"");
                 for (String[] game:games){
                     FootballGame currGame= createFootballGame(game);
-                    currSeason.addGame(currGame);
+                    currSeason.addGame(currGame,currLeage.getName());
                 }
             }
         }
@@ -235,7 +249,7 @@ public class restoreFromDB {
     //need fix!!!!!!!!!!!!!!!!!!!!!!!!
     private Ticket createTicket(String[] values) {
         //String[] values={ticket.getTicketID(),ticket.getWrittenByID(),ticket.getAnswer(),ticket.getComplaint(),ticket.getIfAnswered()+""};
-        Member writtenBy=(Member)system.GetSpecificFromDB(2,values[1]);
+        Member writtenBy=(Member)system.GetSpecificFromMemory(2,values[1]);
         Ticket ticket=new Ticket(writtenBy,values[3]);
         //ticket.
         return null;
@@ -262,7 +276,7 @@ public class restoreFromDB {
     }
 
     private Team createTeam(String[] values){
-        Stadium stadium =(Stadium) system.GetSpecificFromDB(11,values[2]);
+        Stadium stadium =(Stadium) system.GetSpecificFromMemory(11,values[2]);
         Team team=new Team(values[0],null,stadium);
         try {
             team.setStatus(Team.Status.values()[Integer.parseInt(values[1])]);
@@ -280,22 +294,22 @@ public class restoreFromDB {
     }
 
     private Coach createCoach(String[] values){
-        Member member=(Member) system.GetSpecificFromDB(2,values[0]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
         Coach coach=new Coach(member,Coach.Certification.values()[Integer.parseInt(values[2])]);
         coach.setJobInTheTeam(values[3]);
         return coach;
     }
 
     private Player createPlayer(String[] values){
-        Member member=(Member) system.GetSpecificFromDB(2,values[0]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
         Player player=new Player(member,Player.Position.values()[Integer.parseInt(values[1])],createLocalDate(values[2]));
-        Team team=(Team)system.GetSpecificFromDB(4,values[3]);
+        Team team=(Team)system.GetSpecificFromMemory(4,values[3]);
         player.addToTeam(team);
         return player;
     }
 
     private MainReferee createMainReferee(String values[]){
-        Member member=(Member) system.GetSpecificFromDB(2,values[0]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
         MainReferee mainReferee=new MainReferee(member);
         boolean active=Boolean.parseBoolean(values[1]);
         if(!active)
@@ -304,7 +318,7 @@ public class restoreFromDB {
     }
 
     private LinesManReferee createLineReferee(String values[]){
-        Member member=(Member) system.GetSpecificFromDB(2,values[0]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
         LinesManReferee linesManReferee=new LinesManReferee(member);
         boolean active=Boolean.parseBoolean(values[1]);
         if(!active)
@@ -313,7 +327,7 @@ public class restoreFromDB {
     }
 
     private VarReferee createVarReferee(String values[]){
-        Member member=(Member) system.GetSpecificFromDB(2,values[0]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
         VarReferee varReferee=new VarReferee(member);
         boolean active=Boolean.parseBoolean(values[1]);
         if(!active)
@@ -322,34 +336,34 @@ public class restoreFromDB {
     }
 
     private TeamManager createTeamManager(String values[], ArrayList<TeamManager.Permissions> permissions){
-        Member member=(Member) system.GetSpecificFromDB(2,values[0]);
-        Team team=(Team) system.GetSpecificFromDB(4,values[2]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
+        Team team=(Team) system.GetSpecificFromMemory(4,values[2]);
         TeamManager manager=new TeamManager(member,team,permissions);
         return manager;
     }
 
     private TeamOwner createTeamOwner(String[] values){
-        Member member=(Member) system.GetSpecificFromDB(2,values[0]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
         TeamOwner owner=new TeamOwner(member);
         return owner;
     }
 
     private LeaguePosition createLeaguePosition(String[] values){
-        Team team=(Team)system.GetSpecificFromDB(4 ,values[2]);
+        Team team=(Team)system.GetSpecificFromMemory(4 ,values[2]);
         LeaguePosition leaguePosition=new LeaguePosition(team,Integer.parseInt(values[3]),Integer.parseInt(values[4]),Integer.parseInt(values[5]),Integer.parseInt(values[6]),Integer.parseInt(values[7]));
         return leaguePosition;
     }
 
     private FootballGame createFootballGame(String[] values){
-        League league=(League)system.GetSpecificFromDB(1,values[0]);
+        League league=(League)system.GetSpecificFromMemory(1,values[0]);
         Season season=league.getSpecSeason(Integer.parseInt(values[1]));
-        Team home=(Team) system.GetSpecificFromDB(4,values[2]);
-        Team away=(Team) system.GetSpecificFromDB(4,values[3]);
+        Team home=(Team) system.GetSpecificFromMemory(4,values[2]);
+        Team away=(Team) system.GetSpecificFromMemory(4,values[3]);
         FootballGame game=new FootballGame(season,home,away,createLocalDateTime(values[4]));
-        MainReferee mainReferee=(MainReferee)system.GetSpecificFromDB(9,values[8]);
-        VarReferee varReferee=(VarReferee)system.GetSpecificFromDB(9,values[9]);
-        LinesManReferee linesManReferee1=(LinesManReferee)system.GetSpecificFromDB(9,values[10]);
-        LinesManReferee linesManReferee2=(LinesManReferee)system.GetSpecificFromDB(9,values[11]);
+        MainReferee mainReferee=(MainReferee)system.GetSpecificFromMemory(9,values[8]);
+        VarReferee varReferee=(VarReferee)system.GetSpecificFromMemory(9,values[9]);
+        LinesManReferee linesManReferee1=(LinesManReferee)system.GetSpecificFromMemory(9,values[10]);
+        LinesManReferee linesManReferee2=(LinesManReferee)system.GetSpecificFromMemory(9,values[11]);
         game.setMainReferee(mainReferee);
         game.setLinesManLeft(linesManReferee1);
         game.setLinesManRight(linesManReferee2);
@@ -362,7 +376,7 @@ public class restoreFromDB {
         for (int i = 0; i < goals; i++) {
             game.awayScoreGoal();
         }
-        Stadium stadium=(Stadium)system.GetSpecificFromDB(11,values[7]);
+        Stadium stadium=(Stadium)system.GetSpecificFromMemory(11,values[7]);
         game.setStadium(stadium);
         return game;
     }

@@ -1,15 +1,12 @@
 package Domain.Jobs;
-import Domain.Events.*;
 import Domain.User.*;
 import Domain.System.*;
 import Domain.Game.*;
-import Domain.Association.*;
 
 import Domain.Events.GameEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Referee extends Job{
     List<FootballGame> GamesToRef;
@@ -30,7 +27,7 @@ public class Referee extends Job{
         ActiveSeasons = new ArrayList<Season>();
         ActiveStatus = true;
         AlphaSystem system = AlphaSystem.getSystem();
-        system.AddtoDB(9, this);
+        system.AddtoMemory(9, this);
         Var = false;
         Line = false;
         Main = false;

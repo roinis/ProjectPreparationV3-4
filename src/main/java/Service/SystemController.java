@@ -1,7 +1,6 @@
 package Service;
 
 import Domain.Association.AssociationMember;
-import Domain.Jobs.TeamOwner;
 import Domain.System.*;
 import Domain.User.Member;
 import Exceptions.DomainException;
@@ -61,7 +60,7 @@ public class SystemController {
     }
 
     private void Logout(String Username) throws DomainException {
-        Member member = (Member)AlphaSystem.getSystem().GetSpecificFromDB(2,Username);
+        Member member = (Member)AlphaSystem.getSystem().GetSpecificFromMemory(2,Username);
         if(member==null){
             throw new DomainException("No such username exists");
         }

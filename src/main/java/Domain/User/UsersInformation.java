@@ -1,9 +1,6 @@
 package Domain.User;//roei cohen
-import Domain.Events.*;
 import Domain.System.*;
-import Domain.Jobs.*;
-import Domain.Game.*;
-import Domain.Association.*;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -142,7 +139,7 @@ public class UsersInformation {
         String user_id="";
         String full_name="";
         String[] lineSplitted = new String[4];
-        List<Member> membersList = (List<Member>) AlphaSystem.getSystem().GetAllFromDB(2);
+        List<Member> membersList = (List<Member>) AlphaSystem.getSystem().GetAllFromMemory(2);
         for(Member member:membersList){
             members.put(member.getUser_name(),member);
         }
@@ -158,7 +155,7 @@ public class UsersInformation {
                 if(!members.containsKey(user_name)) {
                     Member new_member = new Member(user_name, user_password, user_id, full_name);
                     this.members.put(user_name, new_member);
-                    AlphaSystem.getSystem().AddtoDB(2,new_member);
+                    AlphaSystem.getSystem().AddtoMemory(2,new_member);
                 }
             }
         }catch(IOException e){

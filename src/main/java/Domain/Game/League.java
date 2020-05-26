@@ -1,9 +1,6 @@
 package Domain.Game;
-import Domain.Events.*;
-import  Domain.User.*;
 import  Domain.System.*;
 import  Domain.Jobs.*;
-import  Domain.Association.*;
 import Exceptions.DomainException;
 import javafx.util.Pair;
 
@@ -28,7 +25,8 @@ public class League {
         this.leagueLinesmans=new LinkedList<LinesManReferee>();
         this.leagueVarReferees=new LinkedList<VarReferee>();
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
-        alphaSystem.AddtoDB(1,this);
+        alphaSystem.AddtoMemory(1,this);
+        alphaSystem.getDB().insert(this);
     }
 
     public void addRefereesToSeason(Season season){
@@ -42,14 +40,17 @@ public class League {
 
     public void addMainReferee(MainReferee referee){
         leagueReferees.add(referee);
+        AlphaSystem.getSystem().getDB().addMainRefereeToLeagueInDB(referee,this);
     }
 
     public void addLinesManReferee(LinesManReferee referee){
         leagueLinesmans.add(referee);
+        AlphaSystem.getSystem().getDB().addLineRefereeToLeagueInDB(referee,this);
     }
 
     public void addVarReferee(VarReferee referee){
         leagueVarReferees.add(referee);
+        AlphaSystem.getSystem().getDB().addVarRefereeToLeagueInDB(referee,this);
     }
 
     public boolean removeMainReferee(MainReferee referee){
@@ -98,6 +99,7 @@ public class League {
                 return false;
         }
         seasons.add(newSeason);
+        AlphaSystem.getSystem().getDB().addSeasonToDB(newSeason,name);
         return true;
     }
 
@@ -174,11 +176,12 @@ public class League {
             addVarReferee((VarReferee) refToAdd);
     }
 
-    public void addSeason(Season currSeason) throws DomainException {
+    public void addSeasonFromDB(Season currSeason) throws DomainException {
         for (Season existingSeason:seasons) {
             if(currSeason.getYear()==existingSeason.getYear())
                 throw  new DomainException("reloading from db error. season already exist");
         }
+        seasons.add(currSeason);
     }
 
     public List<Season>  getAllSeasons() {

@@ -5,13 +5,14 @@ import Domain.Jobs.*;
 import Domain.Game.*;
 import Domain.Association.*;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class EndGameEvent implements Event {
-    Time eventGameTime;
+    LocalDateTime eventGameTime;
     Team homeTeam;
     Team awayTeam;
 
-    public EndGameEvent(Time eventGameTime, Team homeTeam, Team awayTeam) {
+    public EndGameEvent(LocalDateTime eventGameTime, Team homeTeam, Team awayTeam) {
         this.eventGameTime = eventGameTime;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
@@ -31,11 +32,11 @@ public class EndGameEvent implements Event {
         AlphaSystem.getSystem().getLog().addEvent(this);
     }
 
-    public Time getEventGameTime() {
+    public LocalDateTime getEventGameTime() {
         return eventGameTime;
     }
 
-    public void setEventGameTime(Time eventGameTime) {
+    public void setEventGameTime(LocalDateTime eventGameTime) {
         this.eventGameTime = eventGameTime;
     }
 

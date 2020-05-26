@@ -1,9 +1,6 @@
 package Domain.User;//roei cohen
-import Domain.Events.*;
 import Domain.System.*;
 import Domain.Jobs.*;
-import Domain.Game.*;
-import Domain.Association.*;
 import Domain.Game.League;
 import Domain.Game.Season;
 import Domain.Game.Team;
@@ -26,7 +23,7 @@ public abstract class User {
 
     public List<String> showLeagueScoringPolicy(String leagueName){
         AlphaSystem system= AlphaSystem.getSystem();
-        League chosenLeague=(League) system.GetSpecificFromDB(1,leagueName);
+        League chosenLeague=(League) system.GetSpecificFromMemory(1,leagueName);
         if(chosenLeague==null)
             return null;
         LinkedList<String> ret=new LinkedList<>();
@@ -38,7 +35,7 @@ public abstract class User {
 
     public List<String> showLeagueSpecSeasonScoringPolicy(String leagueName,int year){
         AlphaSystem system= AlphaSystem.getSystem();
-        League chosenLeague=(League) system.GetSpecificFromDB(1,leagueName);
+        League chosenLeague=(League) system.GetSpecificFromMemory(1,leagueName);
         if(chosenLeague==null)
             return null;
         Season season=chosenLeague.getSpecSeason(year);
@@ -54,7 +51,7 @@ public abstract class User {
 
     public LinkedList<Pair<String, Integer>> showLeagueTable(String leagueName,int SeasonYear){
         AlphaSystem system= AlphaSystem.getSystem();
-        League chosenLeague=(League) system.GetSpecificFromDB(1,leagueName);
+        League chosenLeague=(League) system.GetSpecificFromMemory(1,leagueName);
         if(chosenLeague==null)
             return null;
         LinkedList<Pair<String, Integer>> ret = chosenLeague.getSeasonRankings(SeasonYear);
@@ -63,7 +60,7 @@ public abstract class User {
 
     public List<String> showLeagueMainReferees(String leagueName){
         AlphaSystem system= AlphaSystem.getSystem();
-        League chosenLeague=(League) system.GetSpecificFromDB(1,leagueName);
+        League chosenLeague=(League) system.GetSpecificFromMemory(1,leagueName);
         if(chosenLeague==null)
             return null;
         LinkedList<String> ret=new LinkedList<>();
@@ -76,7 +73,7 @@ public abstract class User {
 
     public List<String> showLeagueVarReferees(String leagueName){
         AlphaSystem system= AlphaSystem.getSystem();
-        League chosenLeague=(League) system.GetSpecificFromDB(1,leagueName);
+        League chosenLeague=(League) system.GetSpecificFromMemory(1,leagueName);
         if(chosenLeague==null)
             return null;
         LinkedList<String> ret=new LinkedList<>();
@@ -89,7 +86,7 @@ public abstract class User {
 
     public List<String> showLeagueLinesManReferees(String leagueName){
         AlphaSystem system= AlphaSystem.getSystem();
-        League chosenLeague=(League) system.GetSpecificFromDB(1,leagueName);
+        League chosenLeague=(League) system.GetSpecificFromMemory(1,leagueName);
         if(chosenLeague==null)
             return null;
         LinkedList<String> ret=new LinkedList<>();
@@ -102,7 +99,7 @@ public abstract class User {
 
     public List<String> showTeamPlayers(String teamName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Team chosenTeam=(Team) system.GetSpecificFromDB(4,teamName);
+        Team chosenTeam=(Team) system.GetSpecificFromMemory(4,teamName);
         if(chosenTeam==null)
             return null;
         LinkedList<String> players=new LinkedList<>();
@@ -114,7 +111,7 @@ public abstract class User {
 
     public List<String> showTeamCoaches(String teamName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Team chosenTeam=(Team) system.GetSpecificFromDB(4,teamName);
+        Team chosenTeam=(Team) system.GetSpecificFromMemory(4,teamName);
         if(chosenTeam==null)
             return null;
         LinkedList<String> coaches=new LinkedList<>();
@@ -126,7 +123,7 @@ public abstract class User {
 
     public List<String> showTeamManagers(String teamName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Team chosenTeam=(Team) system.GetSpecificFromDB(4,teamName);
+        Team chosenTeam=(Team) system.GetSpecificFromMemory(4,teamName);
         if(chosenTeam==null)
             return null;
         LinkedList<String> managers=new LinkedList<>();
@@ -138,7 +135,7 @@ public abstract class User {
 
     public List<String> showTeamOwners(String teamName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Team chosenTeam=(Team) system.GetSpecificFromDB(4,teamName);
+        Team chosenTeam=(Team) system.GetSpecificFromMemory(4,teamName);
         if(chosenTeam==null)
             return null;
         LinkedList<String> owners=new LinkedList<>();
@@ -150,7 +147,7 @@ public abstract class User {
 
     public String showTeamStadium(String teamName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Team chosenTeam=(Team) system.GetSpecificFromDB(4,teamName);
+        Team chosenTeam=(Team) system.GetSpecificFromMemory(4,teamName);
         if(chosenTeam==null)
             return null;
         return chosenTeam.getHomeStadium().getStadiumName();
@@ -158,21 +155,21 @@ public abstract class User {
 
     public String showPlayerTeam(String playerName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Player chosenPlayer=(Player) system.GetSpecificFromDB(7,playerName);
+        Player chosenPlayer=(Player) system.GetSpecificFromMemory(7,playerName);
         if(chosenPlayer==null)
             return null;
         return chosenPlayer.getTeam().getTeamName();
     }
     public String showPlayerPosition(String playerName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Player chosenPlayer=(Player) system.GetSpecificFromDB(7,playerName);
+        Player chosenPlayer=(Player) system.GetSpecificFromMemory(7,playerName);
         if(chosenPlayer==null)
             return null;
         return chosenPlayer.getPositionName();
     }
     public String showPlayerBirthDate(String playerName){
         AlphaSystem system= AlphaSystem.getSystem();
-        Player chosenPlayer=(Player) system.GetSpecificFromDB(7,playerName);
+        Player chosenPlayer=(Player) system.GetSpecificFromMemory(7,playerName);
         if(chosenPlayer==null)
             return null;
         return chosenPlayer.getStringBirthDate();
@@ -192,7 +189,7 @@ public abstract class User {
 
     public List<String> showCoachPrivateInfo(String coachName){
         AlphaSystem system = AlphaSystem.getSystem();
-        Coach coach = (Coach) system.GetSpecificFromDB(3,coachName);
+        Coach coach = (Coach) system.GetSpecificFromMemory(3,coachName);
         if (coach == null)
             return null;
         List<String> coachInfo = new ArrayList<>();
@@ -205,7 +202,7 @@ public abstract class User {
 
     public List<String> showTeamManagerPrivateInfo(String teamManagerName){
         AlphaSystem system = AlphaSystem.getSystem();
-        TeamManager teamManager = (TeamManager) system.GetSpecificFromDB(5,teamManagerName);
+        TeamManager teamManager = (TeamManager) system.GetSpecificFromMemory(5,teamManagerName);
         if (teamManager == null)
             return null;
         List<String> teamManagerInfo = new ArrayList<>();
