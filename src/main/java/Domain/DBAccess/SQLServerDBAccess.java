@@ -102,7 +102,43 @@ public class SQLServerDBAccess {
         return null;
     }
 
-    public String[][] getGamesFouls(String s, String homeTeamName, String awayTeamName) {
+    public String[][] getGamesFouls(String date, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameGoals(String date, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameInjurys(String date, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameoffsides(String date, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameRedCardEvents(String date, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameYellowCardEvents(String date, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameStartEvent(String s, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameSubstitutionEvent(String s, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGamerelocationEvent(String date, String homeTeamName, String awayTeamName) {
+        return null;
+    }
+
+    public String[][] getGameEndEvent(String s, String homeTeamName, String awayTeamName) {
         return null;
     }
 }

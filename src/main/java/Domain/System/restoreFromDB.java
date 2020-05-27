@@ -2,7 +2,7 @@ package Domain.System;
 
 import Domain.Association.*;
 import Domain.DBAccess.SQLServerDBAccess;
-import Domain.Events.FoulEvent;
+import Domain.Events.*;
 import Domain.Game.*;
 import Domain.Jobs.*;
 import Domain.User.*;
@@ -121,22 +121,23 @@ public class restoreFromDB {
             }
         }
         List<TeamOwner> OwnersList = team.getOwners();
-        for (TeamOwner owner:OwnersList) {
+        /*for (TeamOwner owner:OwnersList) {
             String[][] appointments=database.getOwnersAppointments(owner.getMember().getUser_id());
             for (String[] appointment:appointments){
                 TeamOwner nomination=(TeamOwner) system.GetSpecificFromMemory(6,appointment[1]);
                 if (nomination!=null) {
                     try {
-                        owner.addOwner(appointment[1]);
+                        owner.add(appointment[1]);
                     } catch (DomainException e) {
                         e.printStackTrace();
                     }
                 }
                 else{
-                    ///ad(d manager??????
+                    TeamManager managerNomination=(TeamManager) system.GetSpecificFromMemory(6,appointment[1]);
+                    owner.addManager();
                 }
             }
-        }
+        }*/
     }
 
     private void restoreFoulEvent(FootballGame game){
@@ -148,6 +149,106 @@ public class restoreFromDB {
             Player eventFouledPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[6]);
             FoulEvent foulEvent=new FoulEvent(dateTime,team,eventPlayer,eventFouledPlayer);
             game.addEventFromDB(foulEvent);
+        }
+    }
+
+    private void restoreGoalEvent(FootballGame game){
+        String[][] goalsEvents=database.getGameGoals(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:goalsEvents){
+            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
+            Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
+            GoalEvent goalEvent=new GoalEvent(dateTime,team,eventPlayer);
+            game.addEventFromDB(goalEvent);
+        }
+    }
+
+    private void restoreInjuryEvent(FootballGame game){
+        String[][] injuryEvents=database.getGameInjurys(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:injuryEvents){
+            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
+            Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
+            InjuryEvent injuryEvent=new InjuryEvent(dateTime,team,eventPlayer);
+            game.addEventFromDB(injuryEvent);
+        }
+    }
+
+    private void restoreOffsideEvent(FootballGame game){
+        String[][] offsideEvents=database.getGameoffsides(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:offsideEvents){
+            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
+            Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
+            OffsideEvent offsideEvent=new OffsideEvent(dateTime,team,eventPlayer);
+            game.addEventFromDB(offsideEvent);
+        }
+    }
+
+    private void restoreredCardEvent(FootballGame game){
+        String[][] cardEvents=database.getGameRedCardEvents(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:cardEvents){
+            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
+            Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
+            RedCardEvent cardEvent=new RedCardEvent(dateTime,team,eventPlayer);
+            game.addEventFromDB(cardEvent);
+        }
+    }
+
+    private void restoreYellowCardEvent(FootballGame game){
+        String[][] cardEvents=database.getGameYellowCardEvents(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:cardEvents){
+            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
+            Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
+            YellowCardEvent cardEvent=new YellowCardEvent(dateTime,team,eventPlayer);
+            game.addEventFromDB(cardEvent);
+        }
+    }
+
+    private void restoreStartGameEvent(FootballGame game){
+        String[][] gameStartEvent=database.getGameStartEvent(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:gameStartEvent){
+            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Team home=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,game.getHomeTeamName());
+            Team away=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,game.getHomeTeamName());
+            StartGameEvent event=new StartGameEvent(dateTime,home,away);
+            game.addEventFromDB(event);
+        }
+    }
+
+    private void restoreSubtitutionEvent(FootballGame game){
+        String[][] gameStartEvent=database.getGameSubstitutionEvent(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:gameStartEvent){
+            LocalDateTime dateTime=createLocalDateTime(values[6]);
+            Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[3]);
+            Player in=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
+            Player out=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[4]);
+            SubstitutionEvent event=new SubstitutionEvent(dateTime,"",team,in,out);
+            game.addEventFromDB(event);
+        }
+    }
+
+    public void restoreGameRelocationEvent(FootballGame game){
+        String[][] gamerelocationEvent=database.getGamerelocationEvent(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+        for (String[] values:gamerelocationEvent){
+            Stadium newStad=(Stadium)AlphaSystem.getSystem().GetSpecificFromMemory(11,values[3]);
+            Stadium oldStad=(Stadium)AlphaSystem.getSystem().GetSpecificFromMemory(11,values[4]);
+            Team home=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,game.getHomeTeamName());
+            Team away=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,game.getAwayTeamName());
+            GameReLocationEvent event=new GameReLocationEvent(oldStad,newStad,home,away);
+            game.addEventFromDB(event);
+        }
+    }
+
+    private void restoreGameEndEvent(FootballGame currGame) {
+        String[][] gameEndEvent=database.getGameEndEvent(currGame.getDate()+"",currGame.getHomeTeamName(),currGame.getAwayTeamName());
+        for (String[] values:gameEndEvent){
+            Team home=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,currGame.getHomeTeamName());
+            Team away=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,currGame.getAwayTeamName());
+            EndGameEvent endGameEvent=new EndGameEvent(currGame.getDate(),home,away);
+            currGame.addEventFromDB(endGameEvent);
         }
     }
 
@@ -221,10 +322,24 @@ public class restoreFromDB {
                 String[][] games=database.getFootballGames(currLeage.getName(),currSeason.getYear()+"");
                 for (String[] game:games){
                     FootballGame currGame= createFootballGame(game);
+                    restorGameEvents(currGame);
                     currSeason.addGame(currGame,currLeage.getName());
                 }
             }
         }
+    }
+
+    private void restorGameEvents(FootballGame currGame) {
+        restoreFoulEvent(currGame);
+        restoreGoalEvent(currGame);
+        restoreInjuryEvent(currGame);
+        restoreGameRelocationEvent(currGame);
+        restoreOffsideEvent(currGame);
+        restoreredCardEvent(currGame);
+        restoreYellowCardEvent(currGame);
+        restoreStartGameEvent(currGame);
+        restoreSubtitutionEvent(currGame);
+        restoreGameEndEvent(currGame);
     }
 
     private void restoreStadiums(){

@@ -353,6 +353,8 @@ public class InsertToDB {
         DBAccess.insertToDB(51,values);
     }
 
+
+
     public void addInjuryEventToDB(InjuryEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
@@ -396,7 +398,7 @@ public class InsertToDB {
         String time=event.getEventGameTime().toString();
         String ingoingID=event.getIngoingPlayer().getMember().getUser_id();
         String outgoingID=event.getEventPlayer().getMember().getUser_id();
-        String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),outgoingID,ingoingID};
+        String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),event.getEventTeam().getTeamName(),outgoingID,ingoingID,time};
         DBAccess.insertToDB(57,values);
     }
 
@@ -409,6 +411,11 @@ public class InsertToDB {
     public void addGameRelocationEventToDB(GameReLocationEvent event, FootballGame game) {
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),event.getGameNewLocation().getStadiumName(),event.getGameOriginalLocation().getStadiumName()};
         DBAccess.insertToDB(59,values);
+    }
+
+    public void addGameEndEvent(EndGameEvent event,FootballGame game){
+        String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName()};
+        DBAccess.insertToDB(60,values);
     }
 }
 /*
