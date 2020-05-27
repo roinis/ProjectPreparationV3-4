@@ -918,11 +918,11 @@ public class SQLServerDBAccess {
     public boolean insertSeasonToDB(String leagueName,int SeasonYear,int NumOf2TeamsGames, int pointsPerWin,int pointsPerLoss,int pointsPerDraw) { }
 
 
-    public boolean insertGameToDB(String leagueName,int SeasonYear,String homeTeamName,String awayTeamName,String date,
+    public boolean insertGameToDB(String leagueName,String SeasonYear,String homeTeamName,String awayTeamName,String date,
                 int homeGoals,int awayGoals,String stadiumName,String mainRID ,String varRID ,String line1RID ,String line2RID ){ }
 
 
-    public boolean insertLeaguePositionToDB(String leagueName,int SeasonYear,String teamName,
+    public boolean insertLeaguePositionToDB(String leagueName,String SeasonYear,String teamName,
                                             String gamesWon,String gamesLoss,String gamesDraw,String goalsScored,String goalsRec){ }
 
     public boolean insertMainRefereeToLeagueToDB(String refereeID,String leagueName){}
