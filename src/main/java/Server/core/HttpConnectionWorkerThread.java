@@ -33,7 +33,7 @@ public class HttpConnectionWorkerThread extends Thread {
                 System.out.println(Msg);
                 System.out.println("---------------------------------------------------------------");
                 Response response = new Response(200);
-                controller.handle(Msg.getPath(),Msg.getBody(),response);
+                controller.routing(Msg.getPath(),Msg.getBody(),response);
                outputStream.write(response.toString().getBytes());
             } catch (notFoundException e){
                 Response response = new Response(404);
@@ -43,9 +43,13 @@ public class HttpConnectionWorkerThread extends Thread {
                 Response response = new Response(400);
                 response.addToBody("error",e.getMessage());
                 outputStream.write(response.toString().getBytes());
-            }catch (Exception e){
+            }catch (NumberFormatException e) {
+                Response response = new Response(400);
+                response.addToBody("error", "please insert a valid input number");
+                outputStream.write(response.toString().getBytes());
+            }catch (Exception e) {
                 Response response = new Response(500);
-                response.addToBody("error","500 Internal Server Error");
+                response.addToBody("error", "500 Internal Server Error");
                 outputStream.write(response.toString().getBytes());
             }
 
