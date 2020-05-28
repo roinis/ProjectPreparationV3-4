@@ -15,8 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JobsController {
+    private JobsResponses jobsResponses;
 
-    public void handle(String path, ArrayList<Parser.StringPair> body, Response response) throws notFoundException, DomainException{
+    public JobsController() {
+        jobsResponses=new JobsResponses();
+    }
+/*
+    public void routing(String path, ArrayList<Parser.StringPair> body, Response response) throws notFoundException, DomainException{
         try {
             String input1, input2, input3, input4, input5;
             switch (path) {
@@ -595,6 +600,8 @@ public class JobsController {
         }catch (Exception e){
             if(e.getClass().equals(DomainException.class))
                 throw (DomainException)e;
+            if(e.getClass().equals(NumberFormatException.class))
+                throw (NumberFormatException)e;
             throw new notFoundException();
         }
 
@@ -1231,5 +1238,5 @@ public class JobsController {
         return owner.setNewStadium( stadiumName);
     }
 
-
+*/
 }

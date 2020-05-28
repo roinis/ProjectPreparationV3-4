@@ -29,21 +29,21 @@ public class MainController {
         return controller;
     }
 
-    public void handle(String path, ArrayList<Parser.StringPair> body, Response response) throws notFoundException, DomainException {
+    public void routing(String path, ArrayList<Parser.StringPair> body, Response response) throws notFoundException, DomainException {
         String[] paths=path.split("/");
         try {
             switch (paths[1]) {
             case "Jobs":
-                jobsController.handle(paths[2],body,response);
+                jobsController.routing(paths[2],body,response);
                 break;
             case "Association":
-                associationController.handle(paths[2],body,response);
+                associationController.routing(paths[2],body,response);
                 break;
             case "User":
-                userController.handle(paths[2],body,response);
+                userController.routing(paths[2],body,response);
                 break;
             case "System":
-                systemController.handle(paths[2],body,response);
+                systemController.routing(paths[2],body,response);
                 break;
                 default:
                     throw new notFoundException();
@@ -51,6 +51,8 @@ public class MainController {
         }catch (Exception e){
             if(e.getClass().equals(DomainException.class))
                 throw (DomainException)e;
+            if(e.getClass().equals(NumberFormatException.class))
+                throw (NumberFormatException)e;
             throw new notFoundException();
         }
 

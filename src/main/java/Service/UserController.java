@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class UserController {
 
-    public void handle(String path, ArrayList<Parser.StringPair> body, Response response){
+    public void routing(String path, ArrayList<Parser.StringPair> body, Response response){
 
     }
 
