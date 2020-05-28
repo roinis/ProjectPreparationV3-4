@@ -1,15 +1,12 @@
 package Domain.Events;
-import Domain.User.*;
 import Domain.System.*;
-import Domain.Jobs.*;
 import Domain.Game.*;
-import Domain.Association.*;
-import java.sql.Time;
+
 import java.time.LocalDateTime;
 
 public class StartGameEvent implements Event {
 
-    private Time eventGameTime;
+    private LocalDateTime eventGameTime;
     private Team homeTeam;
     private Team awayTeam;
 
@@ -33,11 +30,11 @@ public class StartGameEvent implements Event {
         AlphaSystem.getSystem().getLog().addEvent(this);
     }
 
-    public Time getEventGameTime() {
+    public LocalDateTime getEventGameTime() {
         return eventGameTime;
     }
 
-    public void setEventGameTime(Time eventGameTime) {
+    public void setEventGameTime(LocalDateTime eventGameTime) {
         this.eventGameTime = eventGameTime;
     }
 

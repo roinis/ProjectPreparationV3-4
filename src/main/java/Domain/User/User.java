@@ -1,8 +1,8 @@
 package Domain.User;//roei cohen
+import Domain.Game.Season;
 import Domain.System.*;
 import Domain.Jobs.*;
 import Domain.Game.League;
-import Domain.Game.Season;
 import Domain.Game.Team;
 import Domain.Jobs.LinesManReferee;
 import Domain.Jobs.VarReferee;

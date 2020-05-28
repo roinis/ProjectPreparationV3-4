@@ -1,19 +1,22 @@
-package main.java.Domain.DBAccess;
+package DBAccess;
 
 import org.junit.Test;
+import Domain.DBAccess.SQLServerDBAccess;
 
 
 public class SQLServerDBAccessTest {
 
-
     @Test
     public void getConnection() {
-        Domain.DBAccess.SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess();
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
         sqlServerDBAccess.getConnection();
     }
 
     @Test
     public void getAllLeagues() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.getAllLeagues();
+        int x=0;
     }
 
     @Test

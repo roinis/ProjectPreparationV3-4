@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class InsertToDB {
     SQLServerDBAccess DBAccess;
     public InsertToDB(){
-        DBAccess=new SQLServerDBAccess();
+        DBAccess=new SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=Football;user=sa;password=Warning11");
     }
 
     private void addLeagueToDB(League league){
@@ -30,7 +30,7 @@ public class InsertToDB {
     private void addAssociationMemberToDB(AssociationMember member){
         if(member==null)
             return;
-        String[] values={member.getUser_id()};
+        String[] values={member.getUser_name()};
         DBAccess.insertToDB(4,values);
     }
 
@@ -50,10 +50,10 @@ public class InsertToDB {
             return;
         String stadium=game.getStadium().getStadiumName();
         String date=game.getDate().toString();
-        String mainRef=game.getMainReferee().getMember().getUser_id();
-        String varRef=game.getVarReferee().getMember().getUser_id();
-        String line1=game.getLinesManLeft().getMember().getUser_id();
-        String line2=game.getLinesManRight().getMember().getUser_id();
+        String mainRef=game.getMainReferee().getMember().getUser_name();
+        String varRef=game.getVarReferee().getMember().getUser_name();
+        String line1=game.getLinesManLeft().getMember().getUser_name();
+        String line2=game.getLinesManRight().getMember().getUser_name();
         DBAccess.insertGameToDB(LeageName,SeasonYear,game.getHomeTeamName(),game.getAwayTeamName(),date,
                 game.getHomeGoals(),game.getAwayGoals(),stadium,mainRef,varRef,line1,line2);
     }
@@ -74,25 +74,25 @@ public class InsertToDB {
     public void addMainRefereeToLeagueInDB(MainReferee ref,League league) {
         if(ref==null||league==null)
             return;
-        DBAccess.insertMainRefereeToLeagueToDB(ref.getMember().getUser_id(),league.getName());
+        DBAccess.insertMainRefereeToLeagueToDB(ref.getMember().getUser_name(),league.getName());
     }
 
     public void addLineRefereeToLeagueInDB(LinesManReferee ref,League league) {
         if(ref==null||league==null)
             return;
-        DBAccess.insertLineRefereeToLeagueToDB(ref.getMember().getUser_id(),league.getName());
+        DBAccess.insertLineRefereeToLeagueToDB(ref.getMember().getUser_name(),league.getName());
     }
 
     public void addVarRefereeToLeagueInDB(VarReferee ref,League league) {
         if(ref==null||league==null)
             return;
-        DBAccess.insertVarRefereeToLeagueToDB(ref.getMember().getUser_id(),league.getName());
+        DBAccess.insertVarRefereeToLeagueToDB(ref.getMember().getUser_name(),league.getName());
     }
 
     public void addFanToTeamInDB(Team team,Member observer){
         if(team==null||observer==null)
             return;
-        DBAccess.insertFanToTeamToDB(team.toString(),(observer).getUser_id());
+        DBAccess.insertFanToTeamToDB(team.toString(),(observer).getUser_name());
     }
 
     public void addBudgetTransactionInDB(Team team, Pair<LocalDateTime,Pair<Double,String>> transaction) {
@@ -104,43 +104,43 @@ public class InsertToDB {
     }
 
     public void addTeamOwnerToTeamInDB(TeamOwner owner, Team team) {
-        String[] values={owner.getMember().getUser_id(),team.toString()};
-        DBAccess.insertTeamOwnerToTeamToDB(owner.getMember().getUser_id(),team.toString());
+        String[] values={owner.getMember().getUser_name(),team.toString()};
+        DBAccess.insertTeamOwnerToTeamToDB(owner.getMember().getUser_name(),team.toString());
     }
 
     public void addAppointmentToOwnerInDB(TeamOwner owner,Job appointment){
-        String[] secValues={owner.getMember().getUser_id(),appointment.getMember().getUser_id()};
-        DBAccess.insertAppointmentToOwnerToDB(owner.getMember().getUser_id(),appointment.getMember().getUser_id());
+        String[] secValues={owner.getMember().getUser_name(),appointment.getMember().getUser_name()};
+        DBAccess.insertAppointmentToOwnerToDB(owner.getMember().getUser_name(),appointment.getMember().getUser_name());
     }
 
     public void addPlayerToTeamInDB(Player player, Team team) {
-        String[] values={team.getTeamName(),player.getMember().getUser_id()};
-        DBAccess.insertPlayerToTeamToDB(team.getTeamName(),player.getMember().getUser_id());
+        String[] values={team.getTeamName(),player.getMember().getUser_name()};
+        DBAccess.insertPlayerToTeamToDB(team.getTeamName(),player.getMember().getUser_name());
     }
 
     public void addCoachToTeamInDB(Coach coach, Team team) {
-        String[] values={team.getTeamName(),coach.getMember().getUser_id()};
-        DBAccess.insertCoachToTeamToDB(team.getTeamName(),coach.getMember().getUser_id());
+        String[] values={team.getTeamName(),coach.getMember().getUser_name()};
+        DBAccess.insertCoachToTeamToDB(team.getTeamName(),coach.getMember().getUser_name());
     }
 
     public void addManagerToTeamInDB(TeamManager coach, Team team) {
-        String[] values={team.getTeamName(),coach.getMember().getUser_id()};
-        DBAccess.insertManagerToTeamToDB(team.getTeamName(),coach.getMember().getUser_id());
+        String[] values={team.getTeamName(),coach.getMember().getUser_name()};
+        DBAccess.insertManagerToTeamToDB(team.getTeamName(),coach.getMember().getUser_name());
     }
 
     public void addPlayerTweetToDB(Player player,String tweet){
-        String[] secValues={player.getMember().getUser_id(),tweet};
-        DBAccess.insertPlayerTweetToDB(player.getMember().getUser_id(),tweet);
+        String[] secValues={player.getMember().getUser_name(),tweet};
+        DBAccess.insertPlayerTweetToDB(player.getMember().getUser_name(),tweet);
     }
 
     public void addPlayerObserverToDB(Player player,Observer observer){
-        String[] secValues={player.getMember().getUser_id(),((Member)observer).getUser_id()+""};
-        DBAccess.insertPlayerObserverToDB(player.getMember().getUser_id(),((Member)observer).getUser_id() +"");
+        String[] secValues={player.getMember().getUser_name(),((Member)observer).getUser_name()+""};
+        DBAccess.insertPlayerObserverToDB(player.getMember().getUser_name(),((Member)observer).getUser_name() +"");
     }
 
     public void addManagerPermissionToDB(TeamManager manager,TeamManager.Permissions permission){
-        String[] secValues={manager.getMember().getUser_id(),permission.ordinal()+""};
-        DBAccess.insertManagerPermissionToDB(manager.getMember().getUser_id(),permission.ordinal()+"");
+        String[] secValues={manager.getMember().getUser_name(),permission.ordinal()+""};
+        DBAccess.insertManagerPermissionToDB(manager.getMember().getUser_name(),permission.ordinal()+"");
     }
 
     private void addTeamToDB(Team team){
@@ -149,13 +149,13 @@ public class InsertToDB {
     }
 
     private void addTeamManagerToDB(TeamManager manager){
-        String[] values={manager.getMember().getUser_id(),manager.getJobName(),manager.getTeam().getTeamName()};
-        DBAccess.insertTeamManagerToDB(manager.getMember().getUser_id(),manager.getJobName(),manager.getTeam().getTeamName());
+        String[] values={manager.getMember().getUser_name(),manager.getJobName(),manager.getTeam().getTeamName()};
+        DBAccess.insertTeamManagerToDB(manager.getMember().getUser_name(),manager.getJobName(),manager.getTeam().getTeamName());
     }
 
     private void addPlayerToDB(Player player){
-        String[] values={player.getMember().getUser_id()+"",player.getPosition().ordinal()+"",player.getDateOfBirth().toString(),player.getTeam().getTeamName()};
-        DBAccess.insertPlayerToDB(player.getMember().getUser_id()+"",player.getPosition().ordinal()+"",
+        String[] values={player.getMember().getUser_name()+"",player.getPosition().ordinal()+"",player.getDateOfBirth().toString(),player.getTeam().getTeamName()};
+        DBAccess.insertPlayerToDB(player.getMember().getUser_name()+"",player.getPosition().ordinal()+"",
                 player.getDateOfBirth().toString(),player.getTeam().getTeamName());
     }
 
@@ -171,14 +171,14 @@ public class InsertToDB {
     }
 
     private void addCoachToDB(Coach coach){
-        String[] values={coach.getMember().getUser_id(),coach.getTeam().getTeamName(),coach.getCertification().ordinal()+"",coach.getJobInTheTeam()};
-        DBAccess.insertCoachToDB(coach.getMember().getUser_id(),coach.getTeam().getTeamName(),
+        String[] values={coach.getMember().getUser_name(),coach.getTeam().getTeamName(),coach.getCertification().ordinal()+"",coach.getJobInTheTeam()};
+        DBAccess.insertCoachToDB(coach.getMember().getUser_name(),coach.getTeam().getTeamName(),
                 coach.getCertification().ordinal()+"",coach.getJobInTheTeam());
     }
 
     public void addCoachTweetToDB(Coach coach,String tweet){
-        String[] values={coach.getMember().getUser_id(),tweet};
-        DBAccess.insertCoachTweetToDB(coach.getMember().getUser_id(),tweet);
+        String[] values={coach.getMember().getUser_name(),tweet};
+        DBAccess.insertCoachTweetToDB(coach.getMember().getUser_name(),tweet);
     }
 
     private void addMemberToDB(Member member){
@@ -188,59 +188,50 @@ public class InsertToDB {
     }
 
     public void addMemberTicketToDB(Member member,Ticket ticket){
-        String[] secValues={member.getUser_id(),ticket.getTicketID()};
-        DBAccess.insertMemberTicketToDB(member.getUser_id(),ticket.getTicketID());
+        String[] secValues={member.getUser_name(),ticket.getTicketID()};
+        DBAccess.insertMemberTicketToDB(member.getUser_name(),ticket.getTicketID());
     }
 
     public void addMemberSearchToDB(Member member,String search){
-        String[] secValues={member.getUser_id(),search};
-        DBAccess.insertMemberSearchToDB(member.getUser_id(),search);
+        String[] secValues={member.getUser_name(),search};
+        DBAccess.insertMemberSearchToDB(member.getUser_name(),search);
     }
 
     public void addMemberTeamFollowed(Member member,Team team){
-        String[] secValues={member.getUser_id(),team.getTeamName()};
-        DBAccess.insertMemberTeamToDB(member.getUser_id(),team.getTeamName());
+        String[] secValues={member.getUser_name(),team.getTeamName()};
+        DBAccess.insertMemberTeamToDB(member.getUser_name(),team.getTeamName());
     }
 
     public void addMemberPlayerFollowed(Member member,Player player){
-        String[] secValues={member.getUser_id(),player.getMember().getUser_id()};
-        DBAccess.insertMemberPlayerFollowedToDB(member.getUser_id(),player.getMember().getUser_id());
+        String[] secValues={member.getUser_name(),player.getMember().getUser_name()};
+        DBAccess.insertMemberPlayerFollowedToDB(member.getUser_name(),player.getMember().getUser_name());
     }
 
     public void addMemberCoachFollowed(Member member,Coach coach){
-        String[] secValues={member.getUser_id(),coach.getMember().getUser_id()};
-        DBAccess.insertMemberCoachFollowedToDB(member.getUser_id(),coach.getMember().getUser_id());
+        String[] secValues={member.getUser_name(),coach.getMember().getUser_name()};
+        DBAccess.insertMemberCoachFollowedToDB(member.getUser_name(),coach.getMember().getUser_name());
     }
 
 
 
-    private boolean addMainRefereeToDB(MainReferee referee){
-        String[] values={referee.getMember().getUser_id(),referee.isActiveStatus()+""};
-        if(!DBAccess.insertMainRefereeToDB(referee.getMember().getUser_id(),referee.isActiveStatus()+""))
-            return false;
-        return true;
+    private void addMainRefereeToDB(MainReferee referee){
+        String[] values={referee.getMember().getUser_name(),referee.isActiveStatus()+""};
+        DBAccess.insertMainRefereeToDB(referee.getMember().getUser_name(),referee.isActiveStatus()+"");
     }
 
-    private boolean addLineRefereeToDB(LinesManReferee referee){
-        String[] values={referee.getMember().getUser_id(),referee.isActiveStatus()+""};
-        if(!DBAccess.insertLineRefereeToDB(referee.getMember().getUser_id(),referee.isActiveStatus()+"")){
-            return false;
-        }
-        return true;
+    private void addLineRefereeToDB(LinesManReferee referee){
+        String[] values={referee.getMember().getUser_name(),referee.isActiveStatus()+""};
+        DBAccess.insertLineRefereeToDB(referee.getMember().getUser_name(),referee.isActiveStatus()+"");
     }
 
-    private boolean addVarRefereeToDB(VarReferee referee){
-        String[] values={referee.getMember().getUser_id(),referee.isActiveStatus()+""};
-        if(!DBAccess.insertVarRefereeToDB(referee.getMember().getUser_id(),referee.isActiveStatus()+""))
-            return false;
-        return true;
+    private void addVarRefereeToDB(VarReferee referee){
+        String[] values={referee.getMember().getUser_name(),referee.isActiveStatus()+""};
+        DBAccess.insertVarRefereeToDB(referee.getMember().getUser_name(),referee.isActiveStatus()+"");
     }
 
-    private boolean addTeamOwnerToDB(TeamOwner owner){
-        String[] values={owner.getMember().getUser_id(),owner.getTeam().getTeamName()};
-        if(!DBAccess.insertTeamOwnerToDB(owner.getMember().getUser_id(),owner.getTeam().getTeamName()))
-            return false;
-        return true;
+    private void addTeamOwnerToDB(TeamOwner owner){
+        String[] values={owner.getMember().getUser_name(),owner.getTeam().getTeamName()};
+        DBAccess.insertTeamOwnerToDB(owner.getMember().getUser_name(),owner.getTeam().getTeamName());
     }
 
     public void insert(Object o) {
@@ -276,17 +267,17 @@ public class InsertToDB {
     public void addFoulEventToDB(FoulEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
-        String player=event.getEventPlayer().getMember().getUser_id();
-        String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player,event.getFouledPlayer().getMember().getUser_id()};
+        String player=event.getEventPlayer().getMember().getUser_name();
+        String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player,event.getFouledPlayer().getMember().getUser_name()};
         DBAccess.insertFoulEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,
-                team,player,event.getFouledPlayer().getMember().getUser_id());
+                team,player,event.getFouledPlayer().getMember().getUser_name());
     }
 
 
     public void addGoalEventToDB(GoalEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
-        String player=event.getEventPlayer().getMember().getUser_id();
+        String player=event.getEventPlayer().getMember().getUser_name();
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player};
         DBAccess.insertGoalEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player);
     }
@@ -296,7 +287,7 @@ public class InsertToDB {
     public void addInjuryEventToDB(InjuryEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
-        String player=event.getEventPlayer().getMember().getUser_id();
+        String player=event.getEventPlayer().getMember().getUser_name();
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player};
         DBAccess.insertInjuryEventToDB(game.getDate()+"",game.getHomeTeamName(),
                 game.getAwayTeamName(),time,team,player);
@@ -305,7 +296,7 @@ public class InsertToDB {
     public void addOffsideEventToDB(OffsideEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
-        String player=event.getEventPlayer().getMember().getUser_id();
+        String player=event.getEventPlayer().getMember().getUser_name();
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player};
         DBAccess.insertOffsideEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player);
     }
@@ -313,7 +304,7 @@ public class InsertToDB {
     public void addRedCardEventToDB(RedCardEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
-        String player=event.getEventPlayer().getMember().getUser_id();
+        String player=event.getEventPlayer().getMember().getUser_name();
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player};
         DBAccess.insertRedCardEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player);
     }
@@ -321,7 +312,7 @@ public class InsertToDB {
     public void addYellowCardEventToDB(YellowCardEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
-        String player=event.getEventPlayer().getMember().getUser_id();
+        String player=event.getEventPlayer().getMember().getUser_name();
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player};
         DBAccess.insertYellowCardEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player);
     }
@@ -335,8 +326,8 @@ public class InsertToDB {
 
     public void addSubstituteEventToDB(SubstitutionEvent event, FootballGame game) {
         String time=event.getEventGameTime().toString();
-        String ingoingID=event.getIngoingPlayer().getMember().getUser_id();
-        String outgoingID=event.getEventPlayer().getMember().getUser_id();
+        String ingoingID=event.getIngoingPlayer().getMember().getUser_name();
+        String outgoingID=event.getEventPlayer().getMember().getUser_name();
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),event.getEventTeam().getTeamName(),outgoingID,ingoingID,time};
         DBAccess.insertSubstituteEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),
                 event.getEventTeam().getTeamName(),outgoingID,ingoingID,time);

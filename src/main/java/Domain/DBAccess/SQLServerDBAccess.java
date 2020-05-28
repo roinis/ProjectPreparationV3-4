@@ -8,11 +8,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SQLServerDBAccess {
-    public static Connection getConnection(){
+    private String connectionUrl;
+
+    public SQLServerDBAccess(String connectionUrl) {
+        this.connectionUrl = connectionUrl;
+    }
+
+    public  Connection getConnection(){
         Connection DBconnection = null;
         try{
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Football;user=sa;password=Warning11";
+            //String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Football;user=sa;password=Warning11";
             DBconnection = DriverManager.getConnection(connectionUrl);
         }catch (Exception e){
             e.printStackTrace();
@@ -994,8 +1000,8 @@ public class SQLServerDBAccess {
         }
     }
 
-    public void insertGameToDB(String leagueName,int SeasonYear,String homeTeamName,String awayTeamName,String date,
-                int homeGoals,int awayGoals,String stadiumName,String mainRID ,String varRID ,String line1RID ,String line2RID ){
+    public void insertGameToDB(String leagueName, String SeasonYear, String homeTeamName, String awayTeamName, String date,
+                               int homeGoals, int awayGoals, String stadiumName, String mainRID , String varRID , String line1RID , String line2RID ){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[FootballGame]\n" +
                 "           ([HomeTeamName]\n" +
@@ -1023,7 +1029,7 @@ public class SQLServerDBAccess {
             statement.setString(7,varRID);
             statement.setString(8,Integer.toString(homeGoals));
             statement.setString(9,Integer.toString(awayGoals));
-            statement.setString(10,Integer.toString(SeasonYear));
+            statement.setString(10,SeasonYear);
             statement.setString(11,leagueName);
             statement.setString(12,stadiumName);
             statement.executeQuery(query);
@@ -1039,7 +1045,7 @@ public class SQLServerDBAccess {
         }
     }
 
-    public void insertLeaguePositionToDB(String leagueName,int SeasonYear,String teamName,
+    public void insertLeaguePositionToDB(String leagueName,String SeasonYear,String teamName,
                                             String gamesWon,String gamesLoss,String gamesDraw,String goalsScored,String goalsRec){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[LeaguePosition]\n" +
@@ -1055,7 +1061,7 @@ public class SQLServerDBAccess {
         try{
             DBconnection = getConnection();
             PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,Integer.toString(SeasonYear));
+            statement.setString(1,SeasonYear);
             statement.setString(2,leagueName);
             statement.setString(3,teamName);
             statement.setString(4,gamesWon);
@@ -2212,6 +2218,10 @@ public class SQLServerDBAccess {
             e.printStackTrace();
         }
         return rsColNames;
+    }
+
+    public void insertStartGameEventToDB(String s, String homeTeamName, String awayTeamName, String time) {
+
     }
 }
 

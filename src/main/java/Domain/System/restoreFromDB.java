@@ -19,7 +19,7 @@ public class restoreFromDB {
     AlphaSystem system=AlphaSystem.getSystem();
 
     public restoreFromDB() {
-        this.database = new SQLServerDBAccess();
+        this.database = new SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=Football;user=sa;password=Warning11");
     }
 
     public void restore(){
@@ -120,24 +120,6 @@ public class restoreFromDB {
                 e.printStackTrace();
             }
         }
-        List<TeamOwner> OwnersList = team.getOwners();
-        /*for (TeamOwner owner:OwnersList) {
-            String[][] appointments=database.getOwnersAppointments(owner.getMember().getUser_id());
-            for (String[] appointment:appointments){
-                TeamOwner nomination=(TeamOwner) system.GetSpecificFromMemory(6,appointment[1]);
-                if (nomination!=null) {
-                    try {
-                        owner.add(appointment[1]);
-                    } catch (DomainException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else{
-                    TeamManager managerNomination=(TeamManager) system.GetSpecificFromMemory(6,appointment[1]);
-                    owner.addManager();
-                }
-            }
-        }*/
     }
 
     private void restoreFoulEvent(FootballGame game){
