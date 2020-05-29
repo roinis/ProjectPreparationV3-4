@@ -1,4 +1,4 @@
-package Server.core;
+/*package Server.core;
 
 import Exceptions.DomainException;
 import Service.MainController;
@@ -77,3 +77,4 @@ public class HttpConnectionWorkerThread extends Thread {
 
     }
 }
+*/

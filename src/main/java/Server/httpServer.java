@@ -1,5 +1,6 @@
 package Server;
-
+public class httpServer {}
+/*
 import Domain.Association.AssociationMember;
 import Domain.Game.*;
 import Domain.Jobs.TeamOwner;
@@ -49,3 +50,4 @@ public class httpServer {
         serverListenerThread.start();
     }
 }
+*/

@@ -1,5 +1,6 @@
 package DBAccess;
 
+import static org.junit.Assert.*;
 import org.junit.Test;
 import Domain.DBAccess.SQLServerDBAccess;
 
@@ -15,52 +16,95 @@ public class SQLServerDBAccessTest {
     @Test
     public void getAllLeagues() {
         SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
-        sqlServerDBAccess.getAllLeagues();
-        int x=0;
+        String[][] ret = sqlServerDBAccess.getAllLeagues();
+        assertEquals(3,ret.length);
+        assertEquals("Bundes League",ret[0][0]);
     }
 
     @Test
     public void getAllLeagueSeasons() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllLeagueSeasons("Bundes League");
+        assertEquals(2,ret.length);
+        assertEquals("1999",ret[0][0]);
     }
 
     @Test
     public void getSeasonPositions() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getSeasonPositions("japanika","1999");
+        assertEquals(4,ret.length);
     }
 
     @Test
     public void getFootballGames() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getFootballGames("japanika","1999");
+        assertEquals(2,ret.length);
     }
 
     @Test
     public void getAllStadiums() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllStadiums();
+        assertEquals(5,ret.length);
     }
 
     @Test
     public void getAllTeams() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllStadiums();
+        assertEquals(5,ret.length);
     }
 
     @Test
     public void getTeamBudget() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getTeamBudget("hbs");
+        assertEquals(3,ret.length);
     }
 
     @Test
     public void getTeamOwners() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getTeamOwners("hbs");
+        assertEquals(3,ret.length);
+        ret = sqlServerDBAccess.getTeamOwners("beitar");
+        assertEquals(2,ret.length);
     }
 
     @Test
     public void getTeamPlayers() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getTeamPlayers("hbs");
+        assertEquals(5,ret.length);
+        ret = sqlServerDBAccess.getTeamPlayers("tel aviv");
+        assertEquals(3,ret.length);
     }
 
     @Test
     public void getOwnersAppointments() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getOwnersAppointments("12");
+        assertEquals(2,ret.length);
+        ret = sqlServerDBAccess.getOwnersAppointments("9");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getTeamCoaches() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getTeamCoaches("hbs");
+        assertEquals(2,ret.length);
+        ret = sqlServerDBAccess.getTeamCoaches("tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getTeamsFans() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getTeamsFans("hbs");
+        assertEquals(3,ret.length);
     }
 
     @Test
@@ -69,18 +113,32 @@ public class SQLServerDBAccessTest {
 
     @Test
     public void getAllPlayers() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllPlayers();
+        assertEquals(8,ret.length);
     }
 
     @Test
     public void getAllCoaches() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllCoaches();
+        assertEquals(4,ret.length);
     }
 
     @Test
     public void getAllManagers() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllManagers();
+        assertEquals(2,ret.length);
     }
 
     @Test
     public void getManagersPermissions() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getManagersPermissions("25");
+        assertEquals(2,ret.length);
+        ret = sqlServerDBAccess.getManagersPermissions("26");
+        assertEquals(1,ret.length);
     }
 
     @Test
@@ -97,14 +155,23 @@ public class SQLServerDBAccessTest {
 
     @Test
     public void getAllMembers() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllMembers();
+        assertEquals(36,ret.length);
     }
 
     @Test
     public void getAllOwners() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllOwners();
+        assertEquals(7,ret.length);
     }
 
     @Test
     public void getAllTickets() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllTickets();
+        assertEquals(3,ret.length);
     }
 
     @Test

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssociationController {
+public class AssociationController {/*
 
     private AssociationResponses associationResponses;
 
@@ -222,5 +222,5 @@ public class AssociationController {
         return (List<League>) AlphaSystem.getSystem().GetAllFromDB(1);
     }
 
-
+*/
 }

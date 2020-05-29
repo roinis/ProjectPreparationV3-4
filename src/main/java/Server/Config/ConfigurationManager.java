@@ -1,4 +1,4 @@
-package Server.Config;
+/*package Server.Config;
 
 import Server.util.json;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -57,4 +57,4 @@ public class ConfigurationManager {
         }
         return myCurrConfiguration;
     }
-}
+}*/
