@@ -1255,9 +1255,6 @@ public class SQLServerDBAccess {
         }
         return resultArray;
     }
-
-
-
     public void insertLeagueToDB(String leagueName,int NumOf2TeamsGames, int pointsPerWin,int pointsPerLoss,int pointsPerDraw){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[League]\n" +
@@ -1275,7 +1272,31 @@ public class SQLServerDBAccess {
             statement.setString(3,Integer.toString(pointsPerWin));
             statement.setString(4,Integer.toString(pointsPerDraw));
             statement.setString(5,Integer.toString(pointsPerLoss));
-            statement.executeQuery(query);
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            };
+        }
+
+    }
+
+    public void insertAssociationMemberToDB(String MemberID){
+        Connection DBconnection = null;
+        String query = "INSERT INTO [dbo].[AssociationMember]\n" +
+                "           ([MemberID])\n" +
+                "     VALUES\n" +
+                "           (?)";
+        try{
+            DBconnection = getConnection();
+            PreparedStatement statement = DBconnection.prepareStatement(query);
+            statement.setString(1,MemberID);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1308,7 +1329,7 @@ public class SQLServerDBAccess {
             statement.setString(4,Integer.toString(pointsPerWin));
             statement.setString(5,Integer.toString(pointsPerDraw));
             statement.setString(6,Integer.toString(pointsPerLoss));
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1321,7 +1342,7 @@ public class SQLServerDBAccess {
         }
     }
 
-    public void insertGameToDB(String leagueName,String SeasonYear,String homeTeamName,String awayTeamName,String date,
+    public void insertGameToDB(String leagueName,int SeasonYear,String homeTeamName,String awayTeamName,String date,
                                int homeGoals,int awayGoals,String stadiumName,String mainRID ,String varRID ,String line1RID ,String line2RID ){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[FootballGame]\n" +
@@ -1350,10 +1371,10 @@ public class SQLServerDBAccess {
             statement.setString(7,varRID);
             statement.setString(8,Integer.toString(homeGoals));
             statement.setString(9,Integer.toString(awayGoals));
-            statement.setString(10,SeasonYear);
+            statement.setString(10,Integer.toString(SeasonYear));
             statement.setString(11,leagueName);
             statement.setString(12,stadiumName);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1366,7 +1387,7 @@ public class SQLServerDBAccess {
         }
     }
 
-    public void insertLeaguePositionToDB(String leagueName,String SeasonYear,String teamName,
+    public void insertLeaguePositionToDB(String leagueName,int SeasonYear,String teamName,
                                          String gamesWon,String gamesLoss,String gamesDraw,String goalsScored,String goalsRec){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[LeaguePosition]\n" +
@@ -1382,7 +1403,7 @@ public class SQLServerDBAccess {
         try{
             DBconnection = getConnection();
             PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,SeasonYear);
+            statement.setString(1,Integer.toString(SeasonYear));
             statement.setString(2,leagueName);
             statement.setString(3,teamName);
             statement.setString(4,gamesWon);
@@ -1390,7 +1411,7 @@ public class SQLServerDBAccess {
             statement.setString(6,gamesDraw);
             statement.setString(7,goalsScored);
             statement.setString(8,goalsRec);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1414,7 +1435,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,leagueName);
             statement.setString(2,refereeID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1438,7 +1459,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,leagueName);
             statement.setString(2,refereeID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1462,7 +1483,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,leagueName);
             statement.setString(2,refereeID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1486,7 +1507,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,teamName);
             statement.setString(2,fanID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1514,7 +1535,7 @@ public class SQLServerDBAccess {
             statement.setString(2,date);
             statement.setString(3,money);
             statement.setString(4,description);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1538,7 +1559,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,teamName);
             statement.setString(2,TOID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1562,7 +1583,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,TOID);
             statement.setString(2,appID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1586,7 +1607,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,teamName);
             statement.setString(2,playerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1610,7 +1631,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,teamName);
             statement.setString(2,coachID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1634,7 +1655,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,teamName);
             statement.setString(2,managerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1659,7 +1680,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,playerID);
             statement.setString(2,tweet);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1684,7 +1705,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,playerID);
             statement.setString(2,observerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1708,7 +1729,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,managerID);
             statement.setString(2,permission);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1734,7 +1755,7 @@ public class SQLServerDBAccess {
             statement.setString(1,teamName);
             statement.setString(2,teamStatus);
             statement.setString(3,stadiumName);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1760,7 +1781,7 @@ public class SQLServerDBAccess {
             statement.setString(1,managerID);
             statement.setString(2,jobName);
             statement.setString(3,teamName);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1788,7 +1809,7 @@ public class SQLServerDBAccess {
             statement.setString(2,playerPosition);
             statement.setString(3,teamName);
             statement.setString(4,dateOfBirth);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1816,7 +1837,7 @@ public class SQLServerDBAccess {
             statement.setString(2,complaint);
             statement.setString(3,answer);
             statement.setString(4,isAnswered);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1840,7 +1861,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,stadiumName);
             statement.setString(2,cityName);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1868,7 +1889,7 @@ public class SQLServerDBAccess {
             statement.setString(2,coachCert);
             statement.setString(3,teamName);
             statement.setString(4,jobInTeam);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1892,7 +1913,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,coachID);
             statement.setString(2,tweet);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1924,7 +1945,7 @@ public class SQLServerDBAccess {
             statement.setString(4,fullName);
             statement.setString(5,"0");
             statement.setString(6,isBlocked);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1948,7 +1969,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,memberID);
             statement.setString(2,ticketID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1972,7 +1993,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,memberID);
             statement.setString(2,search);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -1996,7 +2017,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,memberID);
             statement.setString(2,teamName);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2020,7 +2041,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,memberID);
             statement.setString(2,playerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2044,7 +2065,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,memberID);
             statement.setString(2,coachID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2070,7 +2091,7 @@ public class SQLServerDBAccess {
             statement.setString(1,refereeID);
             statement.setString(2,"1");
             statement.setString(2,isActive);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2096,7 +2117,7 @@ public class SQLServerDBAccess {
             statement.setString(1,refereeID);
             statement.setString(2,"2");
             statement.setString(2,isActive);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2122,7 +2143,7 @@ public class SQLServerDBAccess {
             statement.setString(1,refereeID);
             statement.setString(2,"3");
             statement.setString(2,isActive);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2146,7 +2167,7 @@ public class SQLServerDBAccess {
             PreparedStatement statement = DBconnection.prepareStatement(query);
             statement.setString(1,TOID);
             statement.setString(2,teamName);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2181,7 +2202,7 @@ public class SQLServerDBAccess {
             statement.setString(5,teamName);
             statement.setString(6,playerID);
             statement.setString(7,fouledPlayerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2214,7 +2235,7 @@ public class SQLServerDBAccess {
             statement.setString(4,time);
             statement.setString(5,teamName);
             statement.setString(6,playerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2247,7 +2268,7 @@ public class SQLServerDBAccess {
             statement.setString(4,time);
             statement.setString(5,teamName);
             statement.setString(6,playerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2280,7 +2301,7 @@ public class SQLServerDBAccess {
             statement.setString(4,time);
             statement.setString(5,teamName);
             statement.setString(6,playerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2313,7 +2334,7 @@ public class SQLServerDBAccess {
             statement.setString(4,time);
             statement.setString(5,teamName);
             statement.setString(6,playerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2346,7 +2367,7 @@ public class SQLServerDBAccess {
             statement.setString(4,time);
             statement.setString(5,teamName);
             statement.setString(6,playerID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2381,7 +2402,7 @@ public class SQLServerDBAccess {
             statement.setString(5,teamName);
             statement.setString(6,outgoingID);
             statement.setString(7,ingoingID);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2412,7 +2433,7 @@ public class SQLServerDBAccess {
             statement.setString(3,awayTeamName);
             statement.setString(4,gameDelayedTime);
             statement.setString(5,gameOriginalTime);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2444,7 +2465,7 @@ public class SQLServerDBAccess {
             statement.setString(3,date);
             statement.setString(4,newLocation);
             statement.setString(5,originalLocation);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2470,7 +2491,7 @@ public class SQLServerDBAccess {
             statement.setString(1,homeTeamName);
             statement.setString(2,awayTeamName);
             statement.setString(3,date);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2496,7 +2517,7 @@ public class SQLServerDBAccess {
             statement.setString(1,homeTeamName);
             statement.setString(2,awayTeamName);
             statement.setString(3,date);
-            statement.executeQuery(query);
+            statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -2508,8 +2529,7 @@ public class SQLServerDBAccess {
             }
         }
     };
-
-
+    
     private String[][] rsToStringArray(ResultSet resultSet){
         List<String[]> listResult = new ArrayList<>();
         List<String> colNames = getRSColNames(resultSet);
