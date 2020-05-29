@@ -391,7 +391,7 @@ public class restoreFromDB {
     }
 
     private Coach createCoach(String[] values){
-        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[1]);
         Coach coach=new Coach(member,Coach.Certification.values()[Integer.parseInt(values[2])]);
         coach.setJobInTheTeam(values[3]);
         return coach;

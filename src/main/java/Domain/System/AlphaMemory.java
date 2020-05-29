@@ -48,13 +48,13 @@ public class AlphaMemory {
                 return null;
             case 2:
                 for (int i = 0; i < Members.size(); i++) {
-                    if (Members.get(i).getUser_name().equals(Name))
+                    if (Members.get(i).getUser_name().equals(Name)||Members.get(i).getUser_id().equals(Name))
                         return Members.get(i);
                 }
                 return null;
             case 3:
                 for (int i = 0; i < Coaches.size(); i++) {
-                    if (Coaches.get(i).getMemberUserName().equals(Name))
+                    if (Coaches.get(i).getMemberUserName().equals(Name)||Coaches.get(i).getMember().getUser_id().equals(Name))
                         return Coaches.get(i);
                 }
                 return null;
@@ -66,31 +66,31 @@ public class AlphaMemory {
                 return null;
             case 5:
                 for (int i = 0; i < TeamManagers.size(); i++) {
-                    if(TeamManagers.get(i).getMemberUserName().equals(Name))
+                    if(TeamManagers.get(i).getMemberUserName().equals(Name)||TeamManagers.get(i).getMember().getUser_id().equals(Name))
                         return TeamManagers.get(i);
                 }
                 return null;
             case 6:
                 for (int i = 0; i < TeamOwners.size(); i++) {
-                    if(TeamOwners.get(i).getMemberUserName().equals(Name))
+                    if(TeamOwners.get(i).getMemberUserName().equals(Name)||TeamOwners.get(i).getMember().getUser_id().equals(Name))
                         return TeamOwners.get(i);
                 }
                 return null;
             case 7:
                 for (int i = 0; i < Players.size(); i++) {
-                    if(Players.get(i).getMemberUserName().equals(Name))
+                    if(Players.get(i).getMemberUserName().equals(Name)||Players.get(i).getMember().getUser_id().equals(Name))
                         return Players.get(i);
                 }
                 return null;
             case 8:
                 for (int i = 0; i < AssociationMembers.size(); i++) {
-                    if(AssociationMembers.get(i).getUser_name().equals(Name))
+                    if(AssociationMembers.get(i).getUser_name().equals(Name)||AssociationMembers.get(i).getUser_id().equals(Name))
                         return AssociationMembers.get(i);
                 }
                 return null;
             case 9:
                 for (int i = 0; i < Referees.size(); i++) {
-                    if(Referees.get(i).getMemberUserName().equals(Name))
+                    if(Referees.get(i).getMemberUserName().equals(Name)||Referees.get(i).getMember().getUser_id().equals(Name))
                         return Referees.get(i);
                 }
                 return null;
