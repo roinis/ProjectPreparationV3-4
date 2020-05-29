@@ -216,185 +216,287 @@ public class SQLServerDBAccessTest {
 
     @Test
     public void insertLeagueToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertLeagueToDB("al",2,3,0,1);
+        String[][] league = sqlServerDBAccess.getAllLeagues();
+        boolean isFound = false;
+        for(int i = 0; i< league.length;i++){
+            if(league[i][0] == "al")
+                isFound = true;
+        }
+        assertTrue(isFound);
     }
 
     @Test
     public void insertAssociationMemberToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertAssociationMemberToDB("12");
     }
 
     @Test
     public void insertSeasonToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertSeasonToDB("al",2008,2,3,0,1);
+        String[][] season = sqlServerDBAccess.getASeason("2008");
+        assertTrue(season.length > 0);
     }
 
     @Test
     public void insertGameToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertGameToDB("al",2008,"maccabi","hapoel","2015-05-02 18:00",
+                2,1,"terner","5","3","1","2");
     }
 
     @Test
     public void insertLeaguePositionToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertLeaguePositionToDB("al",2008,"maccabi","20","6","6","80","50");
     }
 
     @Test
     public void insertMainRefereeToLeagueToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMainRefereeToLeagueToDB("20","al");
     }
 
     @Test
     public void insertLineRefereeToLeagueToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertLineRefereeToLeagueToDB("19","al");
     }
 
     @Test
     public void insertVarRefereeToLeagueToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertLineRefereeToLeagueToDB("18","al");
     }
 
     @Test
     public void insertFanToTeamToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertFanToTeamToDB("maccabi","2");
     }
 
     @Test
     public void insertBudgetTransactionToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertBudgetTransactionToDB("maccabi","2015-05-02 18:00","20000","paycheck");
     }
 
     @Test
     public void insertTeamOwnerToTeamToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertTeamOwnerToTeamToDB("6","maccabi");
     }
 
     @Test
     public void insertAppointmentToOwnerToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertTeamOwnerToTeamToDB("6","maccabi");
     }
 
     @Test
     public void insertPlayerToTeamToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertPlayerToTeamToDB("maccabi","5");
     }
 
     @Test
     public void insertCoachToTeamToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertCoachToTeamToDB("maccabi","8");
     }
 
     @Test
     public void insertManagerToTeamToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertManagerToTeamToDB("maccabi","7");
     }
 
     @Test
     public void insertPlayerTweetToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertPlayerTweetToDB("5","wow");
     }
 
     @Test
     public void insertPlayerObserverToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertPlayerObserverToDB("5","15");
     }
 
     @Test
     public void insertManagerPermissionToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertManagerPermissionToDB("7","1");
     }
 
     @Test
     public void insertTeamToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertTeamToDB("maccabi","1","terner");
     }
 
     @Test
     public void insertTeamManagerToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertTeamManagerToDB("16","","maccabi");
     }
 
     @Test
     public void insertPlayerToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertPlayerToDB("5","3","2015-05-02 18:00","maccabi");
     }
 
     @Test
     public void insertTicketToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertTicketToDB("1","5","no","ddd","1");
     }
 
     @Test
     public void insertStadiumToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertStadiumToDB("terner","beersheba");
     }
 
     @Test
     public void insertCoachToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertCoachToDB("8","maccabi","2","blblb");
     }
 
     @Test
     public void insertCoachTweetToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertCoachTweetToDB("8","sub");
     }
 
     @Test
     public void insertMemberToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMemberToDB("30","barak bahar","bh","12","0");
     }
 
     @Test
     public void insertMemberTicketToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMemberTicketToDB("30","sub");
     }
 
     @Test
     public void insertMemberSearchToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMemberSearchToDB("30","whatt");
     }
 
     @Test
     public void insertMemberTeamToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMemberTeamToDB("30","macabbi");
     }
 
     @Test
     public void insertMemberPlayerFollowedToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMemberPlayerFollowedToDB("30","5");
     }
 
     @Test
     public void insertMemberCoachFollowedToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMemberCoachFollowedToDB("30","8");
     }
 
     @Test
     public void insertMainRefereeToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertMainRefereeToDB("20","1");
     }
 
     @Test
     public void insertLineRefereeToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertLineRefereeToDB("19","1");
     }
 
     @Test
     public void insertVarRefereeToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertVarRefereeToDB("18","1");
     }
 
     @Test
     public void insertTeamOwnerToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertTeamOwnerToDB("13","maccabi");
     }
 
     @Test
     public void insertFoulEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertFoulEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5","6");
     }
 
     @Test
     public void insertGoalEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertGoalEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5");
     }
 
     @Test
     public void insertInjuryEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertInjuryEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5");
     }
 
     @Test
     public void insertOffsideEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertOffsideEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5");
     }
 
     @Test
     public void insertRedCardEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertRedCardEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5");
     }
 
     @Test
     public void insertYellowCardEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertYellowCardEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5");
     }
 
     @Test
     public void insertSubstituteEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertSubstituteEventToDB("2015-05-02 18:00","maccabi","hapoel","maccabi","5","6","16:15");
     }
 
     @Test
     public void insertGameDelayedEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertGameDelayedEventToDB("2015-05-02 18:00","maccabi","hapoel","2015-05-02 20:00","2015-05-02 18:00");
     }
 
     @Test
     public void insertGameRelocationEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertGameRelocationEventToDB("2015-05-02 18:00","maccabi","hapoel","carmel","terner");
     }
 
     @Test
     public void insertGameEndEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertGameEndEventToDB("2015-05-02 20:10","maccabi","hapoel");
     }
 
     @Test
     public void insertGameStartEventToDB() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        sqlServerDBAccess.insertGameStartEventToDB("2015-05-02 18:00","maccabi","hapoel");
     }
 }

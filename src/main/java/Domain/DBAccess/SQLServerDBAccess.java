@@ -69,6 +69,123 @@ public class SQLServerDBAccess {
         return resultArray;
     }
 
+    public String[][] getALeague(String LeagueName) {
+        Connection DBconnection = null;
+        ResultSet resultSet = null;
+        String[][] resultArray=null;
+        String query = "SELECT [LeagueName]\n" +
+                "      ,[NumOfTwoTeamsGames]\n" +
+                "      ,[PointsPerWin]\n" +
+                "      ,[PointsPerDraw]\n" +
+                "      ,[PointsPerLoss]\n" +
+                "  FROM [dbo].[League]" +
+                "  WHERE LeagueName = ?";
+        try{
+            DBconnection = getConnection();
+            PreparedStatement statement = DBconnection.prepareStatement(query);
+            statement.setString(1,LeagueName);
+            resultSet = statement.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            LinkedList<String[]> list=new LinkedList<>();
+            while (resultSet.next()){
+                String[] row=new String[resultSetMetaData.getColumnCount()];
+                for (int i = 0;i < resultSetMetaData.getColumnCount(); i++) {
+                    row[i] = resultSet.getString(i+1);
+                }
+                list.add(row);
+            }
+            resultArray=convertListToArray(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            };
+        }
+        return resultArray;
+    }
+
+    public String[][] getAllSeasons() {
+        Connection DBconnection = null;
+        ResultSet resultSet = null;
+        String[][] resultArray=null;
+        String query = "SELECT  [SYear]\n" +
+                "      ,[LeagueName]\n" +
+                "      ,[NumOfTwoTeamsGames]\n" +
+                "      ,[PointsPerWin]\n" +
+                "      ,[PointsPerDraw]\n" +
+                "      ,[PointsPerLoss]\n" +
+                "  FROM [Football].[dbo].[Season]";
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            resultSet = statement.executeQuery(query);
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            LinkedList<String[]> list=new LinkedList<>();
+            while (resultSet.next()){
+                String[] row=new String[resultSetMetaData.getColumnCount()];
+                for (int i = 0;i < resultSetMetaData.getColumnCount(); i++) {
+                    row[i] = resultSet.getString(i+1);
+                }
+                list.add(row);
+            }
+            resultArray=convertListToArray(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            };
+        }
+        return resultArray;
+    }
+
+    public String[][] getASeason(String seasonYear) {
+        Connection DBconnection = null;
+        ResultSet resultSet = null;
+        String[][] resultArray=null;
+        String query = "SELECT  [SYear]\n" +
+                "      ,[LeagueName]\n" +
+                "      ,[NumOfTwoTeamsGames]\n" +
+                "      ,[PointsPerWin]\n" +
+                "      ,[PointsPerDraw]\n" +
+                "      ,[PointsPerLoss]\n" +
+                "  FROM [Football].[dbo].[Season]" +
+                "  WHERE SYear = ?";
+        try{
+            DBconnection = getConnection();
+            PreparedStatement statement = DBconnection.prepareStatement(query);
+            statement.setString(1,seasonYear);
+            resultSet = statement.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            LinkedList<String[]> list=new LinkedList<>();
+            while (resultSet.next()){
+                String[] row=new String[resultSetMetaData.getColumnCount()];
+                for (int i = 0;i < resultSetMetaData.getColumnCount(); i++) {
+                    row[i] = resultSet.getString(i+1);
+                }
+                list.add(row);
+            }
+            resultArray=convertListToArray(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            };
+        }
+        return resultArray;
+    }
+
     public String[][] getAllLeagueSeasons(String LeagueName) {
         Connection DBconnection = null;
         ResultSet resultSet = null;
@@ -2529,7 +2646,7 @@ public class SQLServerDBAccess {
             }
         }
     };
-    
+
     private String[][] rsToStringArray(ResultSet resultSet){
         List<String[]> listResult = new ArrayList<>();
         List<String> colNames = getRSColNames(resultSet);
