@@ -13,6 +13,7 @@ import Server.Config.ConfigurationManager;
 import Server.core.ServerListenerThread;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.time.LocalDate;
 
 public class httpServer {
@@ -47,7 +48,7 @@ public class httpServer {
             associationMember.AddRefToLeague((Referee) meir.getJob("referee"),league1);
             associationMember.AddTeamToSeasonInLeague("l1",2020,team1);
             associationMember.AddTeamToSeasonInLeague("l1",2020,team2);
-            league1.getSpecSeason(2020).scheduleGames();
+            league1.getSpecSeason(2020).scheduleGames("l1");
             league1.getSpecSeason(2020).scheduleMainReferees(league1.getLeagueReferees());
 
             System.out.println();
@@ -60,7 +61,7 @@ public class httpServer {
         Configuration conf = ConfigurationManager.getInstance().getCurrConfiguration();
         System.out.println("Using Port:"+conf.getPort());
         System.out.println("Using Webroot:"+conf.getWebroot());
-        ServerListenerThread serverListenerThread = new ServerListenerThread(conf.getPort(),conf.getWebroot());
+        ServerListenerThread serverListenerThread = new ServerListenerThread(8080, InetAddress.getLocalHost().getHostAddress());
         serverListenerThread.start();
     }
 }

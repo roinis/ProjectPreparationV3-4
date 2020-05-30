@@ -8,11 +8,9 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 
 public class FoulEvent extends GameEvent {
-    Player fouledPlayer;
 
-    public FoulEvent(LocalDateTime eventGameTime, Team team, Player player, Player fouledPlayer) {
+    public FoulEvent(Time eventGameTime, Team team, Player player) {
         super(eventGameTime, team, player);
-        this.fouledPlayer = fouledPlayer;
     }
 
     @Override
@@ -20,18 +18,10 @@ public class FoulEvent extends GameEvent {
         return "The Player "
                 + eventPlayer.getMember().getFull_name()
                 + " of team " + eventTeam.getTeamName()
-                + " Committed a foul on "
-                + fouledPlayer.getMember().getFull_name()
-                + " at "
+                + " Committed a foul on at "
                 + eventGameTime + ".";
     }
 
-    public Player getFouledPlayer() {
-        return fouledPlayer;
-    }
 
-    public void setFouledPlayer(Player fouledPlayer) {
-        this.fouledPlayer = fouledPlayer;
-    }
 }
 

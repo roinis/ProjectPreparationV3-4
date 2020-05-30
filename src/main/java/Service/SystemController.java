@@ -32,8 +32,7 @@ public class SystemController {
                     Member member=Login(input1, input2);
                     systemResponses.LoginResponse(member,response);
                     try {
-                        Socket socket=new Socket(input3, Integer.parseInt(input4));
-                        member.setAlertThread(new alertThread(socket,member));
+                        member.setAlertThread(new alertThread(input3, Integer.parseInt(input4),member));
                         member.update();
                     }catch (Exception e){
                         System.out.println(e);

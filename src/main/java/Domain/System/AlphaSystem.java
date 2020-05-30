@@ -85,7 +85,7 @@ public class AlphaSystem {
 
     public void Logout(Member member){
         LoggedInMembers.remove(member);
-        //member.logout();
+        member.logout();
     }
 
     public  Object GetSpecificFromMemory(int Type, String Name)

@@ -4,6 +4,7 @@ import Domain.System.Observer;
 import Domain.Jobs.*;
 import Domain.Game.*;
 import Domain.System.*;
+import Server.core.alertThread;
 
 
 import java.util.*;
@@ -16,6 +17,7 @@ public class Member extends User implements Observer {
     private String full_name;
     private HashMap<String,Job> jobs;
     private List<Event> eventList;
+    private List<Event> eventListToSend;
     private boolean online;
     private boolean blocked;
     private List<Ticket> ticketList;
@@ -24,6 +26,7 @@ public class Member extends User implements Observer {
     private List<Team> teamsFollowed;
     private List<Player> playersFollowed;
     private List<Coach> coachesFollowed;
+    private Server.core.alertThread alertThread;
 
     public Member(String user_name,String user_password,String user_id,String full_name){
         super();
@@ -41,6 +44,7 @@ public class Member extends User implements Observer {
         coachesFollowed = new ArrayList<>();
         online=false;
         blocked = false;
+        this.eventListToSend=new LinkedList<>();
     }
 
     public String getUser_password(){
@@ -131,6 +135,7 @@ public class Member extends User implements Observer {
 
     public void logout(){
         online=false;
+        close();
     }
 
     public boolean removeJob(String job_name){
@@ -145,9 +150,16 @@ public class Member extends User implements Observer {
         return user_name;
     }
 
+    public void update() {
+        alertThread.start();
+    }
+
     @Override
     public void update(Event newEvent) {
         this.eventList.add(newEvent);
+        this.eventListToSend.add(newEvent);
+        if(online)
+            update();
         System.out.println(newEvent.toString());
     }
 
@@ -266,5 +278,17 @@ public class Member extends User implements Observer {
 
     public List<Coach> getCoachesFollowed() {
         return coachesFollowed;
+    }
+
+    public void setAlertThread(Server.core.alertThread alertThread) {
+        this.alertThread = alertThread;
+    }
+
+    public List<Event> getEventListToSend() {
+        return eventListToSend;
+    }
+
+    public void close(){
+        alertThread=null;
     }
 }

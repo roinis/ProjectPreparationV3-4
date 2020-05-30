@@ -17,6 +17,11 @@ public class AssociationMember extends Member {
         super(member);
     }
 
+    public AssociationMember(String user_name, String user_password, String user_id, String full_name) {
+        super(user_name, user_password, user_id, full_name);
+        AlphaSystem.getSystem().AddtoMemory(2,this);
+    }
+
     public void NewLeague(String LeagueName){
         //should be in League
         AlphaSystem system = AlphaSystem.getSystem();
@@ -32,7 +37,7 @@ public class AssociationMember extends Member {
         AlphaSystem.getSystem().getDB().addSeasonToDB(CurrLeague.getSpecSeason(year),LeagueName);
     }
 
-    public void AddNewTeam(String TeamName, Member teamOwner, Stadium HomeStadium ) throws Exception {
+    public void AddNewTeam(String TeamName, Member teamOwner, Stadium HomeStadium ) throws DomainException {
         TeamOwner Owner = new TeamOwner(teamOwner);
         teamOwner.addJob(Owner);
         Team NewTeam = new Team(TeamName, Owner, HomeStadium);

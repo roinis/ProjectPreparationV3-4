@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class GoalEvent extends GameEvent {
 
-    public GoalEvent(LocalDateTime eventGameTime, Team team, Player player) {
+    public GoalEvent(Time eventGameTime, Team team, Player player) {
         super(eventGameTime, team, player);
     }
 

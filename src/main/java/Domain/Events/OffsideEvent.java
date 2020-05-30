@@ -8,7 +8,7 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 
 public class OffsideEvent extends GameEvent {
-    public OffsideEvent(LocalDateTime eventGameTime, Team team, Player player) {
+    public OffsideEvent(Time eventGameTime, Team team, Player player) {
         super(eventGameTime, team, player);
     }
 

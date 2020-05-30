@@ -268,9 +268,9 @@ public class InsertToDB {
         String time=event.getEventGameTime().toString();
         String team=event.getEventTeam().getTeamName();
         String player=event.getEventPlayer().getMember().getUser_name();
-        String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player,event.getFouledPlayer().getMember().getUser_name()};
+        String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,team,player};
         DBAccess.insertFoulEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName(),time,
-                team,player,event.getFouledPlayer().getMember().getUser_name());
+                team,player);
     }
 
 
@@ -365,6 +365,10 @@ public class InsertToDB {
 
     public void updateSeasonSchedualingP(String leagueToChange, int year, int numOfMatches) {
         DBAccess.updateSeasonSchedualingP(leagueToChange,year+"",numOfMatches+"");
+    }
+
+    public void updateLeaguePosition(int year,String leagueName,String teamName,int gamesWon,int gamesLoss,int gamesDraw,int goals,int recievedGoals){
+        DBAccess.updateLeaguePosition(leagueName,year+"",teamName,gamesWon+"",gamesLoss+"",gamesDraw+"",goals+"",recievedGoals+"");
     }
 }
 /*

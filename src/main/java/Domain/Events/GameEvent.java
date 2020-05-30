@@ -9,11 +9,11 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 
 public abstract class GameEvent implements Event {
-    LocalDateTime eventGameTime;
+    Time eventGameTime;
     Team eventTeam;
     Player eventPlayer;
 
-    public GameEvent(LocalDateTime eventGameTime, Team team, Player player) {
+    public GameEvent(Time eventGameTime, Team team, Player player) {
         this.eventGameTime = eventGameTime;
         eventTeam = team;
         eventPlayer = player;
@@ -24,11 +24,11 @@ public abstract class GameEvent implements Event {
         AlphaSystem.getSystem().getLog().addEvent(this);
     }
 
-    public LocalDateTime getEventGameTime() {
+    public Time getEventGameTime() {
         return eventGameTime;
     }
 
-    public void setEventGameTime(LocalDateTime eventGameTime) {
+    public void setEventGameTime(Time eventGameTime) {
         this.eventGameTime = eventGameTime;
     }
 

@@ -494,7 +494,7 @@ public class SQLServerDBAccessTest {
     @Test
     public void insertFoulEventToDB() {
         SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
-        sqlServerDBAccess.insertFoulEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5","6");
+        sqlServerDBAccess.insertFoulEventToDB("2015-05-02 18:00","maccabi","hapoel","16:15","maccabi","5");
     }
 
     @Test

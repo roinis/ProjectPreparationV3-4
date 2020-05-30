@@ -1,13 +1,12 @@
 package Domain.DBAccess;
 
-import jdk.nashorn.internal.runtime.ECMAException;
-
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class SQLServerDBAccess {
     private String connectionUrl;
@@ -2349,7 +2348,7 @@ public class SQLServerDBAccess {
     }
 
     public void insertFoulEventToDB(String date,String homeTeamName,String awayTeamName,String time,
-                                    String teamName,String playerID ,String fouledPlayerID){
+                                    String teamName,String playerID){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[GameFoulEvent]\n" +
                 "           ([HomeTeamName]\n" +
@@ -2358,8 +2357,7 @@ public class SQLServerDBAccess {
                 "           ,[GameTime]\n" +
                 "           ,[TeamName]\n" +
                 "           ,[PlayerID]\n" +
-                "           ,[FouledPlayerID])\n" +
-                "     VALUES (?,?,?)";
+                "     VALUES (?,?,?,?,?,?)";
         try{
             DBconnection = getConnection();
             PreparedStatement statement = DBconnection.prepareStatement(query);
@@ -2369,7 +2367,6 @@ public class SQLServerDBAccess {
             statement.setString(4,time);
             statement.setString(5,teamName);
             statement.setString(6,playerID);
-            statement.setString(7,fouledPlayerID);
             statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
@@ -2827,6 +2824,32 @@ public class SQLServerDBAccess {
             }
         }
     }
+    public void updateLeaguePosition(String leagueName, String year, String teamName, String won, String loss, String draw, String goals, String recieved) {
+        Connection DBconnection = null;
+        String query = "update [dbo].[LeaguePosition]\n set" +
+                "           [GamesWin] = " + won  + "\n" +
+                "           ,[GamesLoss] = " + loss  + "\n" +
+                "           ,[GamesDraw] = " + draw  + "\n" +
+                "           ,[GoalsScored] = " + goals  + "\n" +
+                "           ,[GoalsReceived] = " + recieved  + "\n" +
+                "     where [LeagueName] = " + "\'" + leagueName +"\' and [SeasonYear] = " + year +" and [TeamName] = \'" +  teamName + "\'";
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 }
 
 /*

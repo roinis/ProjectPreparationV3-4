@@ -8,6 +8,7 @@ import Domain.Jobs.*;
 import Domain.User.*;
 import Exceptions.DomainException;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -125,11 +126,10 @@ public class restoreFromDB {
     private void restoreFoulEvent(FootballGame game){
         String[][] foulEvents=database.getGamesFouls(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:foulEvents){
-            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Time dateTime=createTime(values[3]);
             Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
             Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
-            Player eventFouledPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[6]);
-            FoulEvent foulEvent=new FoulEvent(dateTime,team,eventPlayer,eventFouledPlayer);
+            FoulEvent foulEvent=new FoulEvent(dateTime,team,eventPlayer);
             game.addEventFromDB(foulEvent);
         }
     }
@@ -137,7 +137,7 @@ public class restoreFromDB {
     private void restoreGoalEvent(FootballGame game){
         String[][] goalsEvents=database.getGameGoals(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:goalsEvents){
-            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Time dateTime=createTime(values[3]);
             Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
             Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
             GoalEvent goalEvent=new GoalEvent(dateTime,team,eventPlayer);
@@ -148,7 +148,7 @@ public class restoreFromDB {
     private void restoreInjuryEvent(FootballGame game){
         String[][] injuryEvents=database.getGameInjurys(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:injuryEvents){
-            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Time dateTime=createTime(values[3]);
             Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
             Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
             InjuryEvent injuryEvent=new InjuryEvent(dateTime,team,eventPlayer);
@@ -159,7 +159,7 @@ public class restoreFromDB {
     private void restoreOffsideEvent(FootballGame game){
         String[][] offsideEvents=database.getGameoffsides(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:offsideEvents){
-            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Time dateTime=createTime(values[3]);
             Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
             Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
             OffsideEvent offsideEvent=new OffsideEvent(dateTime,team,eventPlayer);
@@ -170,7 +170,7 @@ public class restoreFromDB {
     private void restoreredCardEvent(FootballGame game){
         String[][] cardEvents=database.getGameRedCardEvents(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:cardEvents){
-            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Time dateTime=createTime(values[3]);
             Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
             Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
             RedCardEvent cardEvent=new RedCardEvent(dateTime,team,eventPlayer);
@@ -181,7 +181,7 @@ public class restoreFromDB {
     private void restoreYellowCardEvent(FootballGame game){
         String[][] cardEvents=database.getGameYellowCardEvents(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:cardEvents){
-            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            Time dateTime=createTime(values[3]);
             Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[4]);
             Player eventPlayer=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
             YellowCardEvent cardEvent=new YellowCardEvent(dateTime,team,eventPlayer);
@@ -203,11 +203,11 @@ public class restoreFromDB {
     private void restoreSubtitutionEvent(FootballGame game){
         String[][] gameStartEvent=database.getGameSubstitutionEvent(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:gameStartEvent){
-            LocalDateTime dateTime=createLocalDateTime(values[6]);
+            Time dateTime=createTime(values[6]);
             Team team=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,values[3]);
             Player in=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[5]);
             Player out=(Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,values[4]);
-            SubstitutionEvent event=new SubstitutionEvent(dateTime,"",team,in,out);
+            SubstitutionEvent event=new SubstitutionEvent(dateTime,team,in,out);
             game.addEventFromDB(event);
         }
     }
@@ -489,6 +489,16 @@ public class restoreFromDB {
             return LocalDateTime.of(Integer.parseInt(c[0]),Integer.parseInt(c[1]),Integer.parseInt(c[2]),Integer.parseInt(c[3]),Integer.parseInt(c[4]));
         }catch (Exception e){
             return LocalDateTime.of(1993,2,2,0,0);
+        }
+    }
+
+    private Time createTime(String value) {
+//        String delimiters = "[-T:]";
+//        String[] c=value.split(delimiters);
+        try{
+            return Time.valueOf(value);
+        }catch (Exception e){
+            return  Time.valueOf("0:0:0");
         }
     }
 

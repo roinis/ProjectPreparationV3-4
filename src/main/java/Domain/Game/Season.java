@@ -55,6 +55,7 @@ public class Season {
             return;
         for (FootballGame game:games) {
             game.setMainReferee(referees.get(index));
+            referees.get(index).AddGameToRef(game);
             index++;
             if(index==referees.size())
                 index=0;

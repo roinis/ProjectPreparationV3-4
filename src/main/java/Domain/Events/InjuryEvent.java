@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class InjuryEvent extends GameEvent {
 
 
-    public InjuryEvent(LocalDateTime eventGameTime, Team team, Player player) {
+    public InjuryEvent(Time eventGameTime, Team team, Player player) {
         super(eventGameTime, team, player);
     }
 

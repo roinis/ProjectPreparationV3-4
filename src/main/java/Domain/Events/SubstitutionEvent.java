@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class SubstitutionEvent extends GameEvent {
     Player ingoingPlayer;
 
-    public SubstitutionEvent(LocalDateTime eventGameTime, String description, Team team, Player outGoingPlayer, Player ingoingPlayer) {
+    public SubstitutionEvent(Time eventGameTime, Team team, Player outGoingPlayer, Player ingoingPlayer) {
         super(eventGameTime,team,outGoingPlayer);
         this.ingoingPlayer = ingoingPlayer;
     }

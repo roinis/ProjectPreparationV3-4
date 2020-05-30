@@ -1,8 +1,6 @@
 package Server.Config;
 
-import Server.util.json;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
+
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,6 +17,8 @@ public class ConfigurationManager {
     public static ConfigurationManager getInstance(){
         if(configurationManager == null)
             configurationManager = new ConfigurationManager();
+        if(myCurrConfiguration==null)
+            myCurrConfiguration=new Configuration();
         return configurationManager;
     }
 
@@ -37,17 +37,6 @@ public class ConfigurationManager {
             }
         } catch (IOException e){
             throw new HttpConfigurationException(e);
-        }
-        JsonNode conf = null;
-        try {
-            conf = json.parse(sb.toString());
-        } catch (IOException e){
-            throw new HttpConfigurationException("Parse",e);
-        }
-        try {
-            myCurrConfiguration = json.fromJson(conf,Configuration.class);
-        } catch (IOException e){
-            throw new HttpConfigurationException("fromJson",e);
         }
     }
 

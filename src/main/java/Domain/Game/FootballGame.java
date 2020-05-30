@@ -105,67 +105,90 @@ public class FootballGame implements Subject {
         this.linesManRight = linesManRight;
     }
 
-    public void addFoulEvent(LocalDateTime time,Team team,Player player,Player fouledPlayer){
-        FoulEvent foul=new FoulEvent(time,team,player,fouledPlayer);
+    public void addFoulEvent(Time time,Team team,Player player){
+        FoulEvent foul=new FoulEvent(time,team,player);
+        events.add(foul);
         notifyObserver(foul);
-        AlphaSystem.getSystem().getDB().addFoulEventToDB(foul,this);
+        //AlphaSystem.getSystem().getDB().addFoulEventToDB(foul,this);
     }
 
-    public void addGoalEvent(LocalDateTime time,Team team,Player player){
+    public void addGoalEvent(Time time,Team team,Player player){
         GoalEvent goal=new GoalEvent(time,team,player);
+        events.add(goal);
+        if (team.equals(home))
+            homeScoreGoal();
+        else
+            awayScoreGoal();
         notifyObserver(goal);
-        AlphaSystem.getSystem().getDB().addGoalEventToDB(goal,this);
+        //AlphaSystem.getSystem().getDB().addGoalEventToDB(goal,this);
     }
 
-    public void addInjuryEvent(LocalDateTime time,Team team,Player player){
+    public void addInjuryEvent(Time time,Team team,Player player){
         InjuryEvent injury=new InjuryEvent(time,team,player);
+        events.add(injury);
         notifyObserver(injury);
-        AlphaSystem.getSystem().getDB().addInjuryEventToDB(injury,this);
+        //AlphaSystem.getSystem().getDB().addInjuryEventToDB(injury,this);
     }
 
-    public void addOffsideEvent(LocalDateTime time,Team team,Player player){
+    public void addOffsideEvent(Time time,Team team,Player player){
         OffsideEvent offside=new OffsideEvent(time,team,player);
+        events.add(offside);
         notifyObserver(offside);
-        AlphaSystem.getSystem().getDB().addOffsideEventToDB(offside,this);
+       // AlphaSystem.getSystem().getDB().addOffsideEventToDB(offside,this);
     }
 
-    public void addRedCardEvent(LocalDateTime time,Team team,Player player){
+    public void addRedCardEvent(Time time,Team team,Player player){
         RedCardEvent redCard=new RedCardEvent(time,team,player);
+        events.add(redCard);
         notifyObserver(redCard);
-        AlphaSystem.getSystem().getDB().addRedCardEventToDB(redCard,this);
+        //AlphaSystem.getSystem().getDB().addRedCardEventToDB(redCard,this);
     }
 
-    public void addYellowCardEvent(LocalDateTime time,Team team,Player player){
+    public void addYellowCardEvent(Time time,Team team,Player player){
         YellowCardEvent yellowCard=new YellowCardEvent(time,team,player);
+        events.add(yellowCard);
         notifyObserver(yellowCard);
-        AlphaSystem.getSystem().getDB().addYellowCardEventToDB(yellowCard,this);
+        //AlphaSystem.getSystem().getDB().addYellowCardEventToDB(yellowCard,this);
     }
 
     public void addStartEvent(LocalDateTime time){
         StartGameEvent start=new StartGameEvent(time,home,away);
         notifyObserver(null);
-        AlphaSystem.getSystem().getDB().addStartGameEventToDB(start,this);
+        events.add(start);
+        //AlphaSystem.getSystem().getDB().addStartGameEventToDB(start,this);
     }
 
-    public void addSubtitutionEvent(LocalDateTime time,String description,Team team,Player in,Player out){
-        SubstitutionEvent substitute=new SubstitutionEvent(time,description,team,in,out);
+    public void addSubstitutionEvent(Time time,Team team,Player in,Player out){
+        SubstitutionEvent substitute=new SubstitutionEvent(time,team,in,out);
         notifyObserver(substitute);
-        AlphaSystem.getSystem().getDB().addSubstituteEventToDB(substitute,this);
+        events.add(substitute);
+        //AlphaSystem.getSystem().getDB().addSubstituteEventToDB(substitute,this);
     }
 
     public void addGameDelayedEvent(LocalDateTime newDate){
         GameDelayedEvent delayed=new GameDelayedEvent(date,newDate,home,away);
         notifyObserver(delayed);
-        AlphaSystem.getSystem().getDB().addGameDelayedEventToDB(delayed,this);
+        //AlphaSystem.getSystem().getDB().addGameDelayedEventToDB(delayed,this);
 
     }
 
     public void addRelocationGameEvent(Stadium newLocation){
         GameReLocationEvent relocation=new GameReLocationEvent(stadium,newLocation,home,away);
         notifyObserver(relocation);
-        AlphaSystem.getSystem().getDB().addGameRelocationEventToDB(relocation,this);
+        events.add(relocation);
+        //AlphaSystem.getSystem().getDB().addGameRelocationEventToDB(relocation,this);
     }
 
+    public void addEndGameEvent(LocalDateTime eventGameTime){
+        EndGameEvent end=new EndGameEvent(eventGameTime,home,away);
+        events.add(end);
+        gameHasEnded();
+    }
+
+
+    public int getNumOfEvents() {
+        return events.size();
+    }
 
 
 

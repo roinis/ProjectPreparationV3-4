@@ -191,12 +191,12 @@ public class AssociationController {
         return AssMember.ChangeSchedulingPolicyForSeason(LeagueToChange, year, numOfMatches);
     }
 
-    public boolean AddTeamToSeasonInLeague(String Username, String LeagueName, int seasonYear,Team team ) throws Exception {
+    public void AddTeamToSeasonInLeague(String Username, String LeagueName, int seasonYear,Team team ) throws Exception {
         AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
         if(AssMember==null){
             throw new Exception("No such username exists");
         }
-        return AssMember.AddTeamToSeasonInLeague(LeagueName, seasonYear, team);
+        AssMember.AddTeamToSeasonInLeague(LeagueName, seasonYear, team);
     }
 
     public List<Team> getTeams(){

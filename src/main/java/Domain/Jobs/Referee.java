@@ -1,10 +1,13 @@
 package Domain.Jobs;
+import Domain.Events.Event;
 import Domain.User.*;
 import Domain.System.*;
 import Domain.Game.*;
 
 import Domain.Events.GameEvent;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,5 +114,41 @@ public class Referee extends Job{
 
     public boolean isActiveStatus() {
         return ActiveStatus;
+    }
+
+    public void addGoalEvent(int index, Time time, Team team, Player player){
+        GamesToRef.get(index).addGoalEvent(time,team,player);
+    }
+
+    public void addFoulEvent(int index,Time time, Team team, Player player){
+        GamesToRef.get(index).addFoulEvent(time,team,player);
+    }
+
+    public void addInjuryEvent(int index,Time time,Team team,Player player){
+        GamesToRef.get(index).addInjuryEvent(time,team,player);
+    }
+
+    public void addOffsideEvent(int index,Time time,Team team,Player player){
+        GamesToRef.get(index).addOffsideEvent(time,team,player);
+    }
+
+    public void addRedCardEvent(int index,Time time,Team team,Player player){
+        GamesToRef.get(index).addRedCardEvent(time,team,player);
+    }
+
+    public void addYellowCardEvent(int index,Time time,Team team,Player player){
+        GamesToRef.get(index).addYellowCardEvent(time,team,player);
+    }
+
+    public void addSubstitutionEvent(int index,Time time, Team team, Player in, Player out){
+        GamesToRef.get(index).addSubstitutionEvent(time,team,in,out);
+    }
+
+    public String crateReport(int index){
+        List<Event> gameEvents=GamesToRef.get(index).getEvents();
+        String report="";
+        for(Event e:gameEvents)
+            report+=e.toString()+"$";
+        return report;
     }
 }

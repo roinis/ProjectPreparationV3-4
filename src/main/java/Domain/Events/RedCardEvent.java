@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class RedCardEvent extends GameEvent {
 
 
-    public RedCardEvent(LocalDateTime eventGameTime, Team team, Player player) {
+    public RedCardEvent(Time eventGameTime, Team team, Player player) {
         super(eventGameTime, team, player);
 
     }
