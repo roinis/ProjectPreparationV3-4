@@ -11,6 +11,7 @@ import Exceptions.notFoundException;
 import http.Parser;
 import http.Response;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +21,10 @@ public class JobsController {
     public JobsController() {
         jobsResponses=new JobsResponses();
     }
-/*
+
     public void routing(String path, ArrayList<Parser.StringPair> body, Response response) throws notFoundException, DomainException{
         try {
-            String input1, input2, input3, input4, input5;
+            String input1, input2, input3, input4, input5,input6,input7;
             switch (path) {
                 case "getCoachTeam":
                     input1 = Parser.getElement("userName", body);
@@ -222,7 +223,7 @@ public class JobsController {
                     input1 = Parser.getElement("refereeName", body);
                     if (input1 == null)
                         throw new DomainException("invalid input");
-                    GetRefereeGames(input1);
+                    jobsResponses.GetRefereeGamesResponse(GetRefereeGames(input1),response);
                     break;
                 case "DelistAsRef":
                     input1 = Parser.getElement("refereeName", body);
@@ -593,6 +594,91 @@ public class JobsController {
                     if (input1 == null || input2 == null)
                         throw new DomainException("invalid input");
                     setNewStadium(input1, input2);
+                    break;
+                case "refereeAddGoalEvent":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    input3 = Parser.getElement("time", body).replace("#",":");
+                    input4 = Parser.getElement("teamName", body);
+                    input5 = Parser.getElement("playerName", body);
+                    if (input1 == null || input2 == null || input3 == null || input4 == null || input5 == null )
+                        throw new DomainException("invalid input");
+                    refereeAddGoalEvent(input1, input2,input3,input4,input5);
+                    response.addToBody("message","The event added in successfully");
+                    break;
+                case "refereeAddFoulEvent":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    input3 = Parser.getElement("time", body).replace("#",":");
+                    input4 = Parser.getElement("teamName", body);
+                    input5 = Parser.getElement("playerName", body);
+                    if (input1 == null || input2 == null || input3 == null || input4 == null || input5 == null )
+                        throw new DomainException("invalid input");
+                    refereeAddFoulEvent(input1, input2,input3,input4,input5);
+                    response.addToBody("message","The event added in successfully");
+                    break;
+                case "refereeAddInjuryEvent":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    input3 = Parser.getElement("time", body).replace("#",":");
+                    input4 = Parser.getElement("teamName", body);
+                    input5 = Parser.getElement("playerName", body);
+                    if (input1 == null || input2 == null || input3 == null || input4 == null || input5 == null )
+                        throw new DomainException("invalid input");
+                    refereeAddInjuryEvent(input1, input2,input3,input4,input5);
+                    response.addToBody("message","The event added in successfully");
+                    break;
+                case "refereeAddOffsideEvent":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    input3 = Parser.getElement("time", body).replace("#",":");
+                    input4 = Parser.getElement("teamName", body);
+                    input5 = Parser.getElement("playerName", body);
+                    if (input1 == null || input2 == null || input3 == null || input4 == null || input5 == null )
+                        throw new DomainException("invalid input");
+                    refereeAddOffsideEvent(input1, input2,input3,input4,input5);
+                    response.addToBody("message","The event added in successfully");
+                    break;
+                case "refereeAddRedCardEvent":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    input3 = Parser.getElement("time", body).replace("#",":");
+                    input4 = Parser.getElement("teamName", body);
+                    input5 = Parser.getElement("playerName", body);
+                    if (input1 == null || input2 == null || input3 == null || input4 == null || input5 == null )
+                        throw new DomainException("invalid input");
+                    refereeAddRedCardEvent(input1, input2,input3,input4,input5);
+                    response.addToBody("message","The event added in successfully");
+                    break;
+                case "refereeAddYellowCardEvent":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    input3 = Parser.getElement("time", body).replace("#",":");
+                    input4 = Parser.getElement("teamName", body);
+                    input5 = Parser.getElement("playerName", body);
+                    if (input1 == null || input2 == null || input3 == null || input4 == null || input5 == null )
+                        throw new DomainException("invalid input");
+                    refereeAddYellowCardEvent(input1, input2,input3,input4,input5);
+                    response.addToBody("message","The event added in successfully");
+                    break;
+                case "refereeAddSubstitutionEvent":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    input3 = Parser.getElement("time", body).replace("#",":");;
+                    input4 = Parser.getElement("teamName", body);
+                    input5 = Parser.getElement("playerInName", body);
+                    input6 = Parser.getElement("playerOutName", body);
+                    if (input1 == null || input2 == null || input3 == null || input4 == null || input5 == null || input6 == null )
+                        throw new DomainException("invalid input");
+                    refereeAddSubstitutionEvent(input1, input2,input3,input4,input5,input6);
+                    response.addToBody("message","The event added in successfully");
+                    break;
+                case "refereeCreateReport":
+                    input1 = Parser.getElement("refereeName", body);
+                    input2 = Parser.getElement("index", body);
+                    if (input1 == null || input2 == null )
+                        throw new DomainException("invalid input");
+                    response.addToBody("report",refereeCreateReport(input1, input2));
                     break;
                 default:
                     throw new notFoundException();
@@ -1238,5 +1324,107 @@ public class JobsController {
         return owner.setNewStadium( stadiumName);
     }
 
-*/
+    public void refereeAddGoalEvent(String refereeName,String index, String time, String teamName, String playerName) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        Player player= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerName);
+        Team team= (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,teamName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        if(player==null)
+            throw new DomainException("this name is not a player name");
+        if(team==null)
+            throw new DomainException("this name is not a team name");
+        referee.addGoalEvent(Integer.parseInt(index),Time.valueOf(time),team,player);
+        int x=0;
+    }
+
+    public void refereeAddFoulEvent(String refereeName,String index, String time, String teamName, String playerName) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        Player player= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerName);
+        Team team= (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,teamName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        if(player==null)
+            throw new DomainException("this name is not a player name");
+        if(team==null)
+            throw new DomainException("this name is not a team name");
+        referee.addFoulEvent(Integer.parseInt(index),Time.valueOf(time),team,player);
+    }
+
+    public void refereeAddInjuryEvent(String refereeName,String index, String time, String teamName, String playerName) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        Player player= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerName);
+        Team team= (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,teamName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        if(player==null)
+            throw new DomainException("this name is not a player name");
+        if(team==null)
+            throw new DomainException("this name is not a team name");
+        referee.addInjuryEvent(Integer.parseInt(index),Time.valueOf(time),team,player);
+    }
+
+    public void refereeAddOffsideEvent(String refereeName,String index, String time, String teamName, String playerName) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        Player player= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerName);
+        Team team= (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,teamName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        if(player==null)
+            throw new DomainException("this name is not a player name");
+        if(team==null)
+            throw new DomainException("this name is not a team name");
+        referee.addOffsideEvent(Integer.parseInt(index),Time.valueOf(time),team,player);
+    }
+
+    public void refereeAddRedCardEvent(String refereeName,String index, String time, String teamName, String playerName) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        Player player= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerName);
+        Team team= (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,teamName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        if(player==null)
+            throw new DomainException("this name is not a player name");
+        if(team==null)
+            throw new DomainException("this name is not a team name");
+        referee.addRedCardEvent(Integer.parseInt(index),Time.valueOf(time),team,player);
+    }
+
+    public void refereeAddYellowCardEvent(String refereeName,String index, String time, String teamName, String playerName) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        Player player= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerName);
+        Team team= (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,teamName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        if(player==null)
+            throw new DomainException("this name is not a player name");
+        if(team==null)
+            throw new DomainException("this name is not a team name");
+        referee.addYellowCardEvent(Integer.parseInt(index),Time.valueOf(time),team,player);
+    }
+
+    public void refereeAddSubstitutionEvent(String refereeName,String index, String time, String teamName, String playerInName,String playerOutName) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        Player in= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerInName);
+        Player out= (Player) AlphaSystem.getSystem().GetSpecificFromMemory(7,playerOutName);
+        Team team= (Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,teamName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        if(in==null)
+            throw new DomainException("this name is not a player name");
+        if(out==null)
+            throw new DomainException("this name is not a player name");
+        if(team==null)
+            throw new DomainException("this name is not a team name");
+        referee.addSubstitutionEvent(Integer.parseInt(index),Time.valueOf(time),team,in,out);
+    }
+
+    public String refereeCreateReport(String refereeName,String index) throws DomainException {
+        Referee referee= (Referee) AlphaSystem.getSystem().GetSpecificFromMemory(9,refereeName);
+        if(referee==null)
+            throw new DomainException("this name is not a referee name");
+        return referee.crateReport(Integer.parseInt(index));
+    }
+
+
 }

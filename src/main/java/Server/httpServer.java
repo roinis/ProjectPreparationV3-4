@@ -1,23 +1,19 @@
 package Server;
-public class httpServer {}
-/*
+
 import Domain.Association.AssociationMember;
 import Domain.Game.*;
+import Domain.Jobs.MainReferee;
+import Domain.Jobs.Player;
+import Domain.Jobs.Referee;
 import Domain.Jobs.TeamOwner;
 import Domain.System.AlphaSystem;
-import Domain.System.Register;
 import Domain.User.Member;
-import Exceptions.DomainException;
 import Server.Config.Configuration;
 import Server.Config.ConfigurationManager;
 import Server.core.ServerListenerThread;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.time.LocalDate;
 
 public class httpServer {
 //    private final static Logger LOGGER = LoggerFactory.getLogger(httpServer.class);
@@ -28,16 +24,34 @@ public class httpServer {
             Stadium stadium=new Stadium("ter","beer sheve");
             AlphaSystem.getSystem().Register("alona","123","456","alona");
             AlphaSystem.getSystem().Register("zino","123","456","zino");
-            Member alona= (Member) AlphaSystem.getSystem().GetSpecificFromDB(2,"alona");
-            Member zino= (Member) AlphaSystem.getSystem().GetSpecificFromDB(2,"zino");
+            AlphaSystem.getSystem().Register("meir","123","456","meir");
+            AlphaSystem.getSystem().Register("gal","123","456","gal atedgi");
+            AlphaSystem.getSystem().Register("elia","123","456","elia barda");
+            Member alona= (Member) AlphaSystem.getSystem().GetSpecificFromMemory(2,"alona");
+            Member zino= (Member) AlphaSystem.getSystem().GetSpecificFromMemory(2,"zino");
+            Member meir= (Member) AlphaSystem.getSystem().GetSpecificFromMemory(2,"meir");
+            Member gal= (Member) AlphaSystem.getSystem().GetSpecificFromMemory(2,"gal");
+            Member elia= (Member) AlphaSystem.getSystem().GetSpecificFromMemory(2,"elia");
+            Player player=new Player(gal,Player.Position.ST,null);
+            Player player2=new Player(elia,Player.Position.ST,null);
             TeamOwner teamOwner1=new TeamOwner(alona);
-//            TeamOwner teamOwner2=new TeamOwner(zino);
+            associationMember.AddNewRef(meir);
+            TeamOwner teamOwner2=new TeamOwner(zino);
+            Team team2=new Team("macabi beer sheve",teamOwner2,stadium);
             Team team1=new Team("beer",teamOwner1,stadium);
-//            teamOwner1.addOwner("zino");
-
+            team1.register(associationMember);
+            teamOwner1.addNewPlayer("gal");
+          //  teamOwner1.addNewPlayer("elia");
             League league1=new League("l1",new SchedulingPolicy(),new ScoringPolicy());
-            League league2=new League("l2",new SchedulingPolicy(),new ScoringPolicy());
-            // Team team2=new Team("macabi beer sheve",teamOwner2,stadium);
+            league1.addSeason(2020,new SchedulingPolicy(),new ScoringPolicy());
+            associationMember.AddRefToLeague((Referee) meir.getJob("referee"),league1);
+            associationMember.AddTeamToSeasonInLeague("l1",2020,team1);
+            associationMember.AddTeamToSeasonInLeague("l1",2020,team2);
+            league1.getSpecSeason(2020).scheduleGames();
+            league1.getSpecSeason(2020).scheduleMainReferees(league1.getLeagueReferees());
+
+            System.out.println();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,4 +64,3 @@ public class httpServer {
         serverListenerThread.start();
     }
 }
-*/

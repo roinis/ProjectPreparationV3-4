@@ -1,4 +1,4 @@
-/*package Server.core;
+package Server.core;
 
 import Exceptions.DomainException;
 import Service.MainController;
@@ -34,6 +34,7 @@ public class HttpConnectionWorkerThread extends Thread {
                 System.out.println("---------------------------------------------------------------");
                 Response response = new Response(200);
                 controller.routing(Msg.getPath(),Msg.getBody(),response);
+                System.out.println(response);
                outputStream.write(response.toString().getBytes());
             } catch (notFoundException e){
                 Response response = new Response(404);
@@ -52,7 +53,6 @@ public class HttpConnectionWorkerThread extends Thread {
                 response.addToBody("error", "500 Internal Server Error");
                 outputStream.write(response.toString().getBytes());
             }
-
             System.out.println("Connection processing finished.");
         } catch (IOException e){
             e.printStackTrace();
@@ -77,4 +77,3 @@ public class HttpConnectionWorkerThread extends Thread {
 
     }
 }
-*/

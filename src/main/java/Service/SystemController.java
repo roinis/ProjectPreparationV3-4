@@ -1,13 +1,14 @@
 package Service;
 
-import Domain.Association.AssociationMember;
 import Domain.System.*;
 import Domain.User.Member;
 import Exceptions.DomainException;
 import Exceptions.notFoundException;
+import Server.core.alertThread;
 import http.Parser;
 import http.Response;
 
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class SystemController {
@@ -24,10 +25,19 @@ public class SystemController {
                 case "Login":
                     input1 = Parser.getElement("user_name", body);
                     input2 = Parser.getElement("password", body);
+                    input3=Parser.getElement("ip",body);
+                    input4=Parser.getElement("port",body);
                     if (input1 == null || input2 == null)
                         throw new DomainException("invalid input");
                     Member member=Login(input1, input2);
                     systemResponses.LoginResponse(member,response);
+                    try {
+                        Socket socket=new Socket(input3, Integer.parseInt(input4));
+                        member.setAlertThread(new alertThread(socket,member));
+                        member.update();
+                    }catch (Exception e){
+                        System.out.println(e);
+                    }
                     break;
                 case "Register":
                     input1 = Parser.getElement("user_name", body);

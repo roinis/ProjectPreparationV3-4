@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssociationController {/*
+public class AssociationController {
 
     private AssociationResponses associationResponses;
 
@@ -109,15 +109,10 @@ public class AssociationController {/*
         AssMember.AddSeasonToLeague(LeagueName,year);
     }
 
-<<<<<<< HEAD
     public void AddNewTeam(String Username, String TeamName, String ownerUserName, String stadiumName ) throws DomainException {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(2,Username);
-        Member teamOwner= (Member) AlphaSystem.getSystem().GetSpecificFromDB(2,ownerUserName);
-        Stadium HomeStadium= (Stadium) AlphaSystem.getSystem().GetSpecificFromDB(11,stadiumName);
-=======
-    public void AddNewTeam(String Username, String TeamName, Member teamOwner, Stadium HomeStadium ) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
->>>>>>> f042eb1a38c82e09ce62d7546031ccbc67a350f2
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(2,Username);
+        Member teamOwner= (Member) AlphaSystem.getSystem().GetSpecificFromMemory(2,ownerUserName);
+        Stadium HomeStadium= (Stadium) AlphaSystem.getSystem().GetSpecificFromMemory(11,stadiumName);
         if(AssMember==null){
             throw new DomainException("No such username exists");
         }
@@ -164,26 +159,16 @@ public class AssociationController {/*
         return AssMember.AddCoachJobToMember(member, certification);
     }
 
-<<<<<<< HEAD
     public void ChangeScoringPolicyForLeague(String Username,String LeagueToChange, int pPerWin,int pPerLoss,int pPerDraw) throws DomainException {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(2,Username);
-=======
-    public void ChangeScoringPolicyForLeague(String Username,String LeagueToChange, int pPerWin,int pPerLoss,int pPerDraw) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
->>>>>>> f042eb1a38c82e09ce62d7546031ccbc67a350f2
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(2,Username);
         if(AssMember==null){
             throw new DomainException("No such username exists");
         }
         AssMember.ChangeScoringPolicyForLeague(LeagueToChange, pPerWin,pPerLoss, pPerDraw);
     }
 
-<<<<<<< HEAD
     public void ChangeSchedulingPolicyForLeague(String Username, String LeagueToChange, int numOfMatches) throws DomainException {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromDB(2,Username);
-=======
-    public void ChangeSchedulingPolicyForLeague(String Username, String LeagueToChange, int numOfMatches) throws Exception {
-        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(8,Username);
->>>>>>> f042eb1a38c82e09ce62d7546031ccbc67a350f2
+        AssociationMember AssMember = (AssociationMember)AlphaSystem.getSystem().GetSpecificFromMemory(2,Username);
         if(AssMember==null){
             throw new DomainException("No such username exists");
         }
@@ -215,12 +200,12 @@ public class AssociationController {/*
     }
 
     public List<Team> getTeams(){
-        return (List<Team>) AlphaSystem.getSystem().GetAllFromDB(4);
+        return (List<Team>) AlphaSystem.getSystem().GetAllFromMemory(4);
     }
 
     public List<League> getLeagues() throws DomainException {
-        return (List<League>) AlphaSystem.getSystem().GetAllFromDB(1);
+        return (List<League>) AlphaSystem.getSystem().GetAllFromMemory(1);
     }
 
-*/
+
 }

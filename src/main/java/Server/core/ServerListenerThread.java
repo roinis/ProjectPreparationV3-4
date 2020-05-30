@@ -1,4 +1,4 @@
-/*package Server.core;
+package Server.core;
 
 import Server.httpServer;
 import org.slf4j.Logger;
@@ -44,4 +44,4 @@ public class ServerListenerThread extends Thread{
                 } catch (IOException e){}
         }
     }
-}*/
+}
