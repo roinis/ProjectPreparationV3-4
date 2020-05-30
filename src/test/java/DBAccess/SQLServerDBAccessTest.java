@@ -17,8 +17,7 @@ public class SQLServerDBAccessTest {
     public void getAllLeagues() {
         SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
         String[][] ret = sqlServerDBAccess.getAllLeagues();
-        assertEquals(3,ret.length);
-        assertEquals("Bundes League",ret[0][0]);
+        assertEquals(5,ret.length);
     }
 
     @Test
@@ -26,7 +25,6 @@ public class SQLServerDBAccessTest {
         SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
         String[][] ret = sqlServerDBAccess.getAllLeagueSeasons("Bundes League");
         assertEquals(2,ret.length);
-        assertEquals("1999",ret[0][0]);
     }
 
     @Test
@@ -40,6 +38,26 @@ public class SQLServerDBAccessTest {
     public void getFootballGames() {
         SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
         String[][] ret = sqlServerDBAccess.getFootballGames("japanika","1999");
+        assertEquals(2,ret.length);
+    }
+    @Test
+    public void getLeagueLinesReferees(){
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getLeagueLinesReferees("japanika");
+        assertEquals(3,ret.length);
+    }
+
+    @Test
+    public void getLeagueVarReferees(){
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getLeagueVarReferees("japanika");
+        assertEquals(2,ret.length);
+    }
+
+    @Test
+    public void getLeagueMainReferees(){
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getLeagueMainReferees("japanika");
         assertEquals(2,ret.length);
     }
 
@@ -143,14 +161,23 @@ public class SQLServerDBAccessTest {
 
     @Test
     public void getAllMainReferees() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllMainReferees();
+        assertEquals(3,ret.length);
     }
 
     @Test
     public void getAllLinesReferees() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllLinesReferees();
+        assertEquals(4,ret.length);
     }
 
     @Test
     public void getAllVarReferees() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getAllVarReferees();
+        assertEquals(2,ret.length);
     }
 
     @Test
@@ -176,42 +203,72 @@ public class SQLServerDBAccessTest {
 
     @Test
     public void getGamesFouls() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGamesFouls("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameGoals() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGameGoals("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameInjurys() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGameInjurys("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameoffsides() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGameoffsides("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameRedCardEvents() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGameRedCardEvents("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameYellowCardEvents() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGameYellowCardEvents("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameStartEvent() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGameStartEvent("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameSubstitutionEvent() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGameSubstitutionEvent("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGamerelocationEvent() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGamerelocationEvent("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
     public void getGameEndEvent() {
+        SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        String[][] ret = sqlServerDBAccess.getGamerelocationEvent("1990-12-12T11:30","hbs","tel aviv");
+        assertEquals(1,ret.length);
     }
 
     @Test
@@ -244,14 +301,14 @@ public class SQLServerDBAccessTest {
     @Test
     public void insertGameToDB() {
         SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
-        sqlServerDBAccess.insertGameToDB("al",2008,"maccabi","hapoel","2015-05-02 18:00",
+        sqlServerDBAccess.insertGameToDB("al","2008","maccabi","hapoel","2015-05-02 18:00",
                 2,1,"terner","5","3","1","2");
     }
 
     @Test
     public void insertLeaguePositionToDB() {
         SQLServerDBAccess sqlServerDBAccess = new Domain.DBAccess.SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
-        sqlServerDBAccess.insertLeaguePositionToDB("al",2008,"maccabi","20","6","6","80","50");
+        sqlServerDBAccess.insertLeaguePositionToDB("al","2008","maccabi","20","6","6","80","50");
     }
 
     @Test

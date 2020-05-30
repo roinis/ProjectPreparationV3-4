@@ -2,6 +2,7 @@ package Domain.DBAccess;
 
 import jdk.nashorn.internal.runtime.ECMAException;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -230,14 +231,8 @@ public class SQLServerDBAccess {
         ResultSet resultSet = null;
         String[][] resultArray=null;
         String query = "SELECT" +
-                "      [TeamName]\n" +
-                "      ,[GamesWin]\n" +
-                "      ,[GamesLoss]\n" +
-                "      ,[GamesDraw]\n" +
-                "      ,[GoalsScored]\n" +
-                "      ,[GoalsReceived]\n" +
-                "      ,[LeagueName]\n" +
-                "      ,[SeasonYear]\n" +
+                "      *" +
+
                 "  FROM [dbo].[LeaguePosition]" +
                 "      WHERE LeagueName = " +"\'"+LeagueName+"\'" + " and SeasonYear = " + seasonYear;
         try{
@@ -271,18 +266,7 @@ public class SQLServerDBAccess {
         Connection DBconnection = null;
         ResultSet resultSet = null;
         String[][] resultArray=null;
-        String query = "SELECT [HomeTeamName]\n" +
-                "      ,[AwayTeamName]\n" +
-                "      ,[GameDate]\n" +
-                "      ,[MainRefereeID]\n" +
-                "      ,[LeftRefereeID]\n" +
-                "      ,[RightRefereeID]\n" +
-                "      ,[VarRefereeID]\n" +
-                "      ,[HomeGoals]\n" +
-                "      ,[AwayGoals]\n" +
-                "      ,[SeasonYear]\n" +
-                "      ,[LeagueName]\n" +
-                "      ,[StadiumName]\n" +
+        String query = "SELECT * \n" +
                 "  FROM [dbo].[FootballGame]\n" +
                 "      WHERE LeagueName = " +"\'"+LeagueName+"\'" + " and SeasonYear = " + seasonYear;
         try{
@@ -351,12 +335,7 @@ public class SQLServerDBAccess {
         Connection DBconnection = null;
         ResultSet resultSet = null;
         String[][] resultArray=null;
-        String query = "SELECT [TeamName]\n" +
-                "      ,[StatusID]\n" +
-                "      ,[StadiumName]\n" +
-                "      ,[Budget]\n" +
-                "      ,[MemberID]\n" +
-                "  FROM [dbo].[Team]";
+        String query = "SELECT * FROM [dbo].[Team]";
         try{
             DBconnection = getConnection();
             Statement statement = DBconnection.createStatement();
@@ -749,12 +728,11 @@ public class SQLServerDBAccess {
         String[][] resultArray=null;
         String query = "SELECT [MemberID]\n" +
                 "      ,[Active]\n" +
-                "  FROM [Football].[dbo].[Referee]\n" +
-                "  WHERE RType = ?";
+                "  FROM [dbo].[Referee]\n" +
+                "  WHERE RType = 1";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,"1");
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -785,12 +763,11 @@ public class SQLServerDBAccess {
         String[][] resultArray=null;
         String query = "SELECT [MemberID]\n" +
                 "      ,[Active]\n" +
-                "  FROM [Football].[dbo].[Referee]\n" +
-                "  WHERE RType = ?";
+                "  FROM [dbo].[Referee]\n" +
+                "  WHERE RType = 2";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,"2");
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -821,12 +798,116 @@ public class SQLServerDBAccess {
         String[][] resultArray=null;
         String query = "SELECT [MemberID]\n" +
                 "      ,[Active]\n" +
-                "  FROM [Football].[dbo].[Referee]\n" +
-                "  WHERE RType = ?";
+                "  FROM [dbo].[Referee]\n" +
+                "  WHERE RType = 3";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,"3");
+            Statement statement = DBconnection.createStatement();
+            resultSet = statement.executeQuery(query);
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            LinkedList<String[]> list=new LinkedList<>();
+            while (resultSet.next()){
+                String[] row=new String[resultSetMetaData.getColumnCount()];
+                for (int i = 0;i < resultSetMetaData.getColumnCount(); i++) {
+                    row[i] = resultSet.getString(i+1);
+                }
+                list.add(row);
+            }
+            resultArray=convertListToArray(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            };
+        }
+        return resultArray;
+    }
+
+    public String[][] getLeagueLinesReferees(String league) {
+        Connection DBconnection = null;
+        ResultSet resultSet = null;
+        String[][] resultArray=null;
+        String query = "SELECT [LeagueName]\n" +
+                "      ,[LineRefereeID]\n" +
+                "  FROM [dbo].[LeagueLReferee]\n" +
+                "  WHERE LeagueName = "+ "\'" + league + "\'";
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            resultSet = statement.executeQuery(query);
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            LinkedList<String[]> list=new LinkedList<>();
+            while (resultSet.next()){
+                String[] row=new String[resultSetMetaData.getColumnCount()];
+                for (int i = 0;i < resultSetMetaData.getColumnCount(); i++) {
+                    row[i] = resultSet.getString(i+1);
+                }
+                list.add(row);
+            }
+            resultArray=convertListToArray(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            };
+        }
+        return resultArray;
+    }
+
+    public String[][] getLeagueVarReferees(String league) {
+        Connection DBconnection = null;
+        ResultSet resultSet = null;
+        String[][] resultArray=null;
+        String query = "SELECT [LeagueName]\n" +
+                "      ,[VarRefereeID]\n" +
+                "  FROM [dbo].[LeagueVReferee]\n" +
+                "  WHERE LeagueName = "+ "\'" + league + "\'";
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            resultSet = statement.executeQuery(query);
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            LinkedList<String[]> list=new LinkedList<>();
+            while (resultSet.next()){
+                String[] row=new String[resultSetMetaData.getColumnCount()];
+                for (int i = 0;i < resultSetMetaData.getColumnCount(); i++) {
+                    row[i] = resultSet.getString(i+1);
+                }
+                list.add(row);
+            }
+            resultArray=convertListToArray(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            };
+        }
+        return resultArray;
+    }
+
+    public String[][] getLeagueMainReferees(String league) {
+        Connection DBconnection = null;
+        ResultSet resultSet = null;
+        String[][] resultArray=null;
+        String query = "SELECT [LeagueName]\n" +
+                "      ,[MainRefereeID]\n" +
+                "  FROM [dbo].[LeagueMReferee]\n" +
+                "  WHERE LeagueName = "+ "\'" + league + "\'";
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -969,14 +1050,11 @@ public class SQLServerDBAccess {
                 "      ,[TeamName]\n" +
                 "      ,[PlayerID]\n" +
                 "      ,[FouledPlayerID]\n" +
-                "  FROM [Football].[dbo].[GameFoulEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameFoulEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,date);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1011,14 +1089,11 @@ public class SQLServerDBAccess {
                 "      ,[GameTime]\n" +
                 "      ,[TeamName]\n" +
                 "      ,[PlayerID]\n" +
-                "  FROM [Football].[dbo].[GameGoalEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameGoalEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,date);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1053,14 +1128,11 @@ public class SQLServerDBAccess {
                 "      ,[GameTime]\n" +
                 "      ,[TeamName]\n" +
                 "      ,[PlayerID]\n" +
-                "  FROM [Football].[dbo].[GameInjuryEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameInjuryEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,date);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1095,14 +1167,11 @@ public class SQLServerDBAccess {
                 "      ,[GameTime]\n" +
                 "      ,[TeamName]\n" +
                 "      ,[PlayerID]\n" +
-                "  FROM [Football].[dbo].[GameOffsideEvent]" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameOffsideEvent]" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,date);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1137,14 +1206,11 @@ public class SQLServerDBAccess {
                 "      ,[GameTime]\n" +
                 "      ,[TeamName]\n" +
                 "      ,[PlayerID]\n" +
-                "  FROM [Football].[dbo].[GameRedCardEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameRedCardEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,date);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1179,14 +1245,11 @@ public class SQLServerDBAccess {
                 "      ,[GameTime]\n" +
                 "      ,[TeamName]\n" +
                 "      ,[PlayerID]\n" +
-                "  FROM [Football].[dbo].[GameYellowCardEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameYellowCardEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,date);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1211,21 +1274,18 @@ public class SQLServerDBAccess {
         return resultArray;
     }
 
-    public String[][] getGameStartEvent(String s, String homeTeamName, String awayTeamName) {
+    public String[][] getGameStartEvent(String date, String homeTeamName, String awayTeamName) {
         Connection DBconnection = null;
         ResultSet resultSet = null;
         String[][] resultArray=null;
         String query = "SELECT [HomeTeamName]\n" +
                 "      ,[AwayTeamName]\n" +
                 "      ,[GameDate]\n" +
-                "  FROM [Football].[dbo].[GameStartEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameStartEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,s);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1250,7 +1310,7 @@ public class SQLServerDBAccess {
         return resultArray;
     }
 
-    public String[][] getGameSubstitutionEvent(String s, String homeTeamName, String awayTeamName) {
+    public String[][] getGameSubstitutionEvent(String date, String homeTeamName, String awayTeamName) {
         Connection DBconnection = null;
         ResultSet resultSet = null;
         String[][] resultArray=null;
@@ -1261,14 +1321,11 @@ public class SQLServerDBAccess {
                 "      ,[TeamName]\n" +
                 "      ,[OutgoingPlayerID]\n" +
                 "      ,[IngoingPlayerID]\n" +
-                "  FROM [Football].[dbo].[GameSubtitutionEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameSubtitutionEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,s);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1302,14 +1359,11 @@ public class SQLServerDBAccess {
                 "      ,[GameDate]\n" +
                 "      ,[NewLocation]\n" +
                 "      ,[OriginalLocation]\n" +
-                "  FROM [Football].[dbo].[GameRelocationEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameRelocationEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,date);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1334,21 +1388,18 @@ public class SQLServerDBAccess {
         return resultArray;
     }
 
-    public String[][] getGameEndEvent(String s, String homeTeamName, String awayTeamName) {
+    public String[][] getGameEndEvent(String date, String homeTeamName, String awayTeamName) {
         Connection DBconnection = null;
         ResultSet resultSet = null;
         String[][] resultArray=null;
         String query = "SELECT [HomeTeamName]\n" +
                 "      ,[AwayTeamName]\n" +
                 "      ,[GameDate]\n" +
-                "  FROM [Football].[dbo].[GameEndEvent]\n" +
-                "  WHERE [GameDate] = ? and [HomeTeamName] = ? and [AwayTeamName] = ?";
+                "  FROM [dbo].[GameEndEvent]\n" +
+                "  WHERE [GameDate] = " + "\'" + date + "\'" + " and [HomeTeamName] = "+ "\'" + homeTeamName + "\'" +" and [AwayTeamName] = " + "\'" + awayTeamName + "\'";
         try{
             DBconnection = getConnection();
-            PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,s);
-            statement.setString(2,homeTeamName);
-            statement.setString(3,awayTeamName);
+            Statement statement = DBconnection.createStatement();
             resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             LinkedList<String[]> list=new LinkedList<>();
@@ -1459,7 +1510,7 @@ public class SQLServerDBAccess {
         }
     }
 
-    public void insertGameToDB(String leagueName,int SeasonYear,String homeTeamName,String awayTeamName,String date,
+    public void insertGameToDB(String leagueName,String SeasonYear,String homeTeamName,String awayTeamName,String date,
                                int homeGoals,int awayGoals,String stadiumName,String mainRID ,String varRID ,String line1RID ,String line2RID ){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[FootballGame]\n" +
@@ -1488,7 +1539,7 @@ public class SQLServerDBAccess {
             statement.setString(7,varRID);
             statement.setString(8,Integer.toString(homeGoals));
             statement.setString(9,Integer.toString(awayGoals));
-            statement.setString(10,Integer.toString(SeasonYear));
+            statement.setString(10,(SeasonYear));
             statement.setString(11,leagueName);
             statement.setString(12,stadiumName);
             statement.executeUpdate();
@@ -1504,7 +1555,7 @@ public class SQLServerDBAccess {
         }
     }
 
-    public void insertLeaguePositionToDB(String leagueName,int SeasonYear,String teamName,
+    public void insertLeaguePositionToDB(String leagueName,String SeasonYear,String teamName,
                                          String gamesWon,String gamesLoss,String gamesDraw,String goalsScored,String goalsRec){
         Connection DBconnection = null;
         String query = "INSERT INTO [dbo].[LeaguePosition]\n" +
@@ -1520,7 +1571,7 @@ public class SQLServerDBAccess {
         try{
             DBconnection = getConnection();
             PreparedStatement statement = DBconnection.prepareStatement(query);
-            statement.setString(1,Integer.toString(SeasonYear));
+            statement.setString(1,SeasonYear);
             statement.setString(2,leagueName);
             statement.setString(3,teamName);
             statement.setString(4,gamesWon);
@@ -2688,7 +2739,96 @@ public class SQLServerDBAccess {
         }
         return arr;
     }
+
+    public void updateLeagueScoringP(String leagueToChange, String ppw, String ppl, String ppd) {
+        Connection DBconnection = null;
+        String query = "update [dbo].[League]\n set" +
+                "           [PointsPerWin] = " + ppw  + "\n" +
+                "           ,[PointsPerLoss] = " + ppl + "\n" +
+                "           ,[PointsPerDraw] = " + ppd + "\n" +
+                "     where [LeagueName] = " + "\'" + leagueToChange +"\'";
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateSeasonScoringP(String leagueToChange,String year, String ppw, String ppl, String ppd) {
+        Connection DBconnection = null;
+        String query = "update [dbo].[Season]\n set" +
+                "           [PointsPerWin] = " + ppw  + "\n" +
+                "           ,[PointsPerLoss] = " + ppl + "\n" +
+                "           ,[PointsPerDraw] = " + ppd + "\n" +
+                "     where [LeagueName] = " + "\'" + leagueToChange +"\'" + " and [SYear] = " + year;
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateLeagueSchedualingP(String leagueToChange, String numOf) {
+        Connection DBconnection = null;
+        String query = "update [dbo].[League]\n set" +
+                "           [NumOfTwoTeamsGames] = " + numOf  + "\n" +
+                "     where [LeagueName] = " + "\'" + leagueToChange +"\'";
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateSeasonSchedualingP(String leagueToChange, String year, String numOf) {
+        Connection DBconnection = null;
+        String query = "update [dbo].[Season]\n set" +
+                "           [NumOfTwoTeamsGames] = " + numOf  + "\n" +
+                "     where [LeagueName] = " + "\'" + leagueToChange +"\' and [SYear] = " + year;
+        try{
+            DBconnection = getConnection();
+            Statement statement = DBconnection.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (DBconnection != null)
+                    DBconnection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 }
+
 /*
  * 1 -league
  * 2 -season

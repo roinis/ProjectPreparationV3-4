@@ -18,7 +18,6 @@ public class TeamOwner extends Job{
         this.jobName="owner";
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
         alphaSystem.AddtoMemory(6,this);
-        alphaSystem.getDB().insert(this);
     }
 
     public void addOwner(String userName) throws DomainException {

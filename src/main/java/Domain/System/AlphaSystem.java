@@ -12,6 +12,7 @@ public class AlphaSystem {
     private Login LoginSys;
     private Register RegisterSys;
     private List<Member> LoggedInMembers;
+    private String DBConnectionURL;
     private InsertToDB DB;
 
 
@@ -22,7 +23,8 @@ public class AlphaSystem {
         RegisterSys = new Register();
         LoggedInMembers = new ArrayList<Member>();
         Admins = new ArrayList<SystemAdmin>();
-        DB=new InsertToDB();
+        DBConnectionURL="jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11";
+        DB=new InsertToDB(DBConnectionURL);
     }
 
     public static AlphaSystem  getSystem(){

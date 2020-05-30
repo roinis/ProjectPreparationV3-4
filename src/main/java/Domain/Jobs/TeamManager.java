@@ -18,7 +18,6 @@ public class TeamManager extends Job {
         this.permissions=permissions;
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
         alphaSystem.AddtoMemory(5,this);
-        alphaSystem.getDB().insert(this);
     }
 
     public Team getTeam() {

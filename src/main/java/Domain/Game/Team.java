@@ -37,12 +37,11 @@ public class Team implements Subject {
         jobsObservers=new ArrayList<>();
         tweets=new ArrayList<>();
         budget=new Budget(this);
-        owner.setTeam(this);
+        /*owner.setTeam(this);
         owners.add(owner);
-        jobsObservers.add(owner.getMember());
+        jobsObservers.add(owner.getMember());*/
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
         alphaSystem.AddtoMemory(4,this);
-        alphaSystem.getDB().insert(this);
     }
 
     public List<Observer> getJobsObservers() {
@@ -93,7 +92,10 @@ public class Team implements Subject {
         jobsObservers.add(teamOwner.getMember());
         owners.add(teamOwner);
         notifyObserver(new NewNominationEvent(this,teamOwner.getMember(),"Team owner"));
-        AlphaSystem.getSystem().getDB().addTeamOwnerToTeamInDB(teamOwner,this);
+        try {
+            AlphaSystem.getSystem().getDB().addTeamOwnerToTeamInDB(teamOwner,this);
+        }catch (Exception e){
+        }
         return true;
     }
 

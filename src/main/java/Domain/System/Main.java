@@ -10,13 +10,7 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        Season s=new Season(1990,null,null);
-        Random random = new Random();
-        int minDay = (int) LocalDate.of(1900, 1, 1).toEpochDay();
-        int maxDay = (int) LocalDate.of(2015, 1, 1).toEpochDay();
-        long randomDay = minDay + random.nextInt(maxDay - minDay);
-
-        LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
-        int x=0;
+        InsertToDB ins=new InsertToDB("jdbc:sqlserver://localhost:1433;databaseName=FootballTest;user=sa;password=Warning11");
+        ins.updateSeasonSchedualingP("Bundes League",2005,200);
     }
 }

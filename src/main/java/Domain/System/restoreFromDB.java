@@ -18,18 +18,19 @@ public class restoreFromDB {
     SQLServerDBAccess database;
     AlphaSystem system=AlphaSystem.getSystem();
 
-    public restoreFromDB() {
-        this.database = new SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=Football;user=sa;password=Warning11");
+    public restoreFromDB(String connectionURL) {
+        this.database = new SQLServerDBAccess(connectionURL);
+        //"jdbc:sqlserver://localhost:1433;databaseName=Football;user=sa;password=Warning11"
     }
 
     public void restore(){
         restoreMembers();
         restoreOwners();
+        restoreStadiums();
         restoreManagers();
         restoreCoaches();
         restorePlayers();
         restoreReferees();
-        restoreStadiums();
         restoreTeams();
         restoreLeagues();
         restoreTickets();
@@ -111,13 +112,12 @@ public class restoreFromDB {
     private void restoreTeamOwners(Team team){
         String[][] owners=database.getTeamOwners(team.getTeamName());
         for (String[] ownerValues:owners) {
-            Member member=(Member) system.GetSpecificFromMemory(2,ownerValues[0]);
-            TeamOwner owner=new TeamOwner(member);
+            TeamOwner owner=(TeamOwner) system.GetSpecificFromMemory(6,ownerValues[1]);
             owner.setTeam(team);
             try {
                 team.addOwner(owner);
             } catch (DomainException e) {
-                e.printStackTrace();
+
             }
         }
     }
@@ -192,7 +192,7 @@ public class restoreFromDB {
     private void restoreStartGameEvent(FootballGame game){
         String[][] gameStartEvent=database.getGameStartEvent(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
         for (String[] values:gameStartEvent){
-            LocalDateTime dateTime=createLocalDateTime(values[3]);
+            LocalDateTime dateTime=createLocalDateTime(values[2]);
             Team home=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,game.getHomeTeamName());
             Team away=(Team) AlphaSystem.getSystem().GetSpecificFromMemory(4,game.getHomeTeamName());
             StartGameEvent event=new StartGameEvent(dateTime,home,away);
@@ -238,7 +238,6 @@ public class restoreFromDB {
         String[][] players=database.getTeamPlayers(team.getTeamName());
         for (String[] playerValues:players) {
             Player player=(Player)system.GetSpecificFromMemory(7,playerValues[1]);
-            player.addToTeam(team);
             try {
                 team.addNewPlayer(player.getMember().getUser_id());
             } catch (DomainException e) {
@@ -275,10 +274,10 @@ public class restoreFromDB {
 
     private void restoreTeamsJobObservers(Team team){
         String[][] wanted=database.getTeamJobObservers(team.getTeamName());
-        for (String[] observerValues:wanted){
+        /*for (String[] observerValues:wanted){
             Member member=(Member)system.GetSpecificFromMemory(2,observerValues[1]);
             //member.followTeam(team);//need fix
-        }
+        }*/
     }
 
 
@@ -354,7 +353,7 @@ public class restoreFromDB {
 
     private League createLeague(String[] values){
         SchedulingPolicy schedulingPolicy=new SchedulingPolicy(Integer.parseInt(values[1]));
-        ScoringPolicy scoringPolicy=new ScoringPolicy(Integer.parseInt(values[2]),Integer.parseInt(values[4]),Integer.parseInt(values[3]));
+        ScoringPolicy scoringPolicy=new ScoringPolicy((int)Double.parseDouble(values[2]),(int)Double.parseDouble(values[4]),(int)Double.parseDouble(values[3]));
         League league=new League(values[0],schedulingPolicy,scoringPolicy);
         return league;
     }
@@ -362,7 +361,7 @@ public class restoreFromDB {
 
     private Season createSeason(String[] values){
         SchedulingPolicy schedulingPolicy=new SchedulingPolicy(Integer.parseInt(values[2]));
-        ScoringPolicy scoringPolicy=new ScoringPolicy(Integer.parseInt(values[3]),Integer.parseInt(values[5]),Integer.parseInt(values[4]));
+        ScoringPolicy scoringPolicy=new ScoringPolicy((int)Double.parseDouble(values[3]),(int)Double.parseDouble(values[5]),(int)Double.parseDouble(values[4]));
         Season season=new Season(Integer.parseInt(values[0]),schedulingPolicy,scoringPolicy);
         return season;
     }
@@ -376,7 +375,8 @@ public class restoreFromDB {
         Stadium stadium =(Stadium) system.GetSpecificFromMemory(11,values[2]);
         Team team=new Team(values[0],null,stadium);
         try {
-            team.setStatus(Team.Status.values()[Integer.parseInt(values[1])]);
+            if(Team.Status.values()[Integer.parseInt(values[1])]== Team.Status.close)
+                team.setStatus(Team.Status.close);
         } catch (DomainException e) {
             e.printStackTrace();
         }
@@ -385,23 +385,24 @@ public class restoreFromDB {
 
     private Member createMember(String[] values){
         //String[] values={member.getUser_id(),member.getFull_name(),member.getUser_name(),member.getUser_password(),member.isBlocked()+""};
-        Member member=new Member(values[2],values[3],values[0],values[1]);
-        member.setBlocked(Boolean.parseBoolean(values[4]));
+       // Member member=new Member(values[2],values[3],values[0],values[1]);
+        //member.setBlocked(Boolean.parseBoolean(values[4]));
+        Register register=new Register();
+        register.registerToSystem(values[1], values[2], values[0], values[3]);
+        Member member=(Member) AlphaSystem.getSystem().GetSpecificFromMemory(2,values[0]);
         return member;
     }
 
     private Coach createCoach(String[] values){
-        Member member=(Member) system.GetSpecificFromMemory(2,values[1]);
-        Coach coach=new Coach(member,Coach.Certification.values()[Integer.parseInt(values[2])]);
+        Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
+        Coach coach=new Coach(member,Coach.Certification.values()[Integer.parseInt(values[1])]);
         coach.setJobInTheTeam(values[3]);
         return coach;
     }
 
     private Player createPlayer(String[] values){
         Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
-        Player player=new Player(member,Player.Position.values()[Integer.parseInt(values[1])],createLocalDate(values[2]));
-        Team team=(Team)system.GetSpecificFromMemory(4,values[3]);
-        player.addToTeam(team);
+        Player player=new Player(member,Player.Position.values()[Integer.parseInt(values[1])],createLocalDate(values[3]));
         return player;
     }
 
@@ -434,8 +435,7 @@ public class restoreFromDB {
 
     private TeamManager createTeamManager(String values[], ArrayList<TeamManager.Permissions> permissions){
         Member member=(Member) system.GetSpecificFromMemory(2,values[0]);
-        Team team=(Team) system.GetSpecificFromMemory(4,values[2]);
-        TeamManager manager=new TeamManager(member,team,permissions);
+        TeamManager manager=new TeamManager(member,null,permissions);
         return manager;
     }
 
@@ -452,28 +452,32 @@ public class restoreFromDB {
     }
 
     private FootballGame createFootballGame(String[] values){
-        League league=(League)system.GetSpecificFromMemory(1,values[0]);
-        Season season=league.getSpecSeason(Integer.parseInt(values[1]));
-        Team home=(Team) system.GetSpecificFromMemory(4,values[2]);
-        Team away=(Team) system.GetSpecificFromMemory(4,values[3]);
-        FootballGame game=new FootballGame(season,home,away,createLocalDateTime(values[4]));
-        MainReferee mainReferee=(MainReferee)system.GetSpecificFromMemory(9,values[8]);
-        VarReferee varReferee=(VarReferee)system.GetSpecificFromMemory(9,values[9]);
-        LinesManReferee linesManReferee1=(LinesManReferee)system.GetSpecificFromMemory(9,values[10]);
-        LinesManReferee linesManReferee2=(LinesManReferee)system.GetSpecificFromMemory(9,values[11]);
+        League league=(League)system.GetSpecificFromMemory(1,values[10]);
+        Season season=league.getSpecSeason(Integer.parseInt(values[9]));
+        Team home=(Team) system.GetSpecificFromMemory(4,values[0]);
+        Team away=(Team) system.GetSpecificFromMemory(4,values[1]);
+        FootballGame game=new FootballGame(season,home,away,createLocalDateTime(values[2]));
+        MainReferee mainReferee=(MainReferee)system.GetSpecificFromMemory(9,values[3]);
+        VarReferee varReferee=(VarReferee)system.GetSpecificFromMemory(9,values[6]);
+        LinesManReferee linesManReferee1=(LinesManReferee)system.GetSpecificFromMemory(9,values[4]);
+        LinesManReferee linesManReferee2=(LinesManReferee)system.GetSpecificFromMemory(9,values[5]);
         game.setMainReferee(mainReferee);
         game.setLinesManLeft(linesManReferee1);
         game.setLinesManRight(linesManReferee2);
         game.setVarReferee(varReferee);
-        int goals=Integer.parseInt(values[5]);
-        for (int i = 0; i < goals; i++) {
-            game.homeScoreGoal();
+        try{
+            int goals=Integer.parseInt(values[7]);
+            for (int i = 0; i < goals; i++) {
+                game.homeScoreGoal();
+            }
+            goals=Integer.parseInt(values[8]);
+            for (int i = 0; i < goals; i++) {
+                game.awayScoreGoal();
+            }
+        }catch (Exception e){
+
         }
-        goals=Integer.parseInt(values[6]);
-        for (int i = 0; i < goals; i++) {
-            game.awayScoreGoal();
-        }
-        Stadium stadium=(Stadium)system.GetSpecificFromMemory(11,values[7]);
+        Stadium stadium=(Stadium)system.GetSpecificFromMemory(11,values[11]);
         game.setStadium(stadium);
         return game;
     }
@@ -481,12 +485,20 @@ public class restoreFromDB {
     private LocalDateTime createLocalDateTime(String value) {
         String delimiters = "[-T:]";
         String[] c=value.split(delimiters);
-        return LocalDateTime.of(Integer.parseInt(c[0]),Integer.parseInt(c[1]),Integer.parseInt(c[2]),Integer.parseInt(c[3]),Integer.parseInt(c[4]));
+        try{
+            return LocalDateTime.of(Integer.parseInt(c[0]),Integer.parseInt(c[1]),Integer.parseInt(c[2]),Integer.parseInt(c[3]),Integer.parseInt(c[4]));
+        }catch (Exception e){
+            return LocalDateTime.of(1993,2,2,0,0);
+        }
     }
 
     private LocalDate createLocalDate(String value) {
         String[] c=value.split("-");
-        LocalDate date=LocalDate.of(Integer.parseInt(c[0]),Integer.parseInt(c[1]),Integer.parseInt(c[2]));
-        return date;
+        try{
+            LocalDate date=LocalDate.of(Integer.parseInt(c[0]),Integer.parseInt(c[1]),Integer.parseInt(c[2]));
+            return date;
+        }catch (Exception e){
+            return LocalDate.of(1993,2,2);
+        }
     }
 }

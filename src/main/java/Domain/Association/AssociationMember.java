@@ -8,6 +8,7 @@ import Exceptions.DomainException;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssociationMember extends Member {
@@ -19,13 +20,16 @@ public class AssociationMember extends Member {
     public void NewLeague(String LeagueName){
         //should be in League
         AlphaSystem system = AlphaSystem.getSystem();
-        system.AddtoMemory(1,new League(LeagueName,new SchedulingPolicy(),new ScoringPolicy()));
+        League league=new League(LeagueName,new SchedulingPolicy(),new ScoringPolicy());
+        system.AddtoMemory(1,league);
+        AlphaSystem.getSystem().getDB().insert(league);
     }
 
     public void AddSeasonToLeague(String LeagueName, int year ){
         AlphaSystem system = AlphaSystem.getSystem();
         League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueName);
         CurrLeague.addSeason(year, CurrLeague.getSchedulingPolicy(), CurrLeague.getScoringPolicy());
+        AlphaSystem.getSystem().getDB().addSeasonToDB(CurrLeague.getSpecSeason(year),LeagueName);
     }
 
     public void AddNewTeam(String TeamName, Member teamOwner, Stadium HomeStadium ) throws Exception {
@@ -36,6 +40,13 @@ public class AssociationMember extends Member {
         List<SystemAdmin> Admins = system.getAdmin();
         if (Admins.size()>0)
             NewTeam.registerSystemAdmin(Admins.get(0));
+        AlphaSystem.getSystem().getDB().insert(NewTeam);
+        AlphaSystem.getSystem().getDB().insert(teamOwner);
+    }
+
+    public void addNewStadium(String name,String city){
+        Stadium stadium=new Stadium(name,city);
+        AlphaSystem.getSystem().getDB().insert(stadium);
     }
 
 
@@ -47,33 +58,46 @@ public class AssociationMember extends Member {
 
     public void AddRefToLeague(Referee RefToAdd, League league){
          league.AddRef(RefToAdd);
+        if(RefToAdd instanceof MainReferee)
+            AlphaSystem.getSystem().getDB().addMainRefereeToLeagueInDB((MainReferee) RefToAdd,league);
+        if(RefToAdd instanceof LinesManReferee)
+            AlphaSystem.getSystem().getDB().addLineRefereeToLeagueInDB((LinesManReferee) RefToAdd,league);
+        if(RefToAdd instanceof VarReferee)
+            AlphaSystem.getSystem().getDB().addVarRefereeToLeagueInDB((VarReferee) RefToAdd,league);
     }
 
     public void ChangeScoringPolicyForLeague(String LeagueToChange, int pPerWin,int pPerLoss,int pPerDraw){
         AlphaSystem system = AlphaSystem.getSystem();
         League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
         CurrLeague.setScoringPolicy(pPerWin,pPerLoss,pPerDraw);
+        AlphaSystem.getSystem().getDB().updateLeagueScoringP(LeagueToChange,pPerWin,pPerLoss,pPerDraw);
     }
 
     public void ChangeSchedulingPolicyForLeague(String LeagueToChange, int numOfMatches){
         AlphaSystem system = AlphaSystem.getSystem();
         League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
         CurrLeague.setSchedulingPolicy(numOfMatches);
+        AlphaSystem.getSystem().getDB().updateLeagueSchedualingP(LeagueToChange,numOfMatches);
     }
 
     public boolean ChangeScoringPolicyForSeason(String LeagueToChange,int year, int pPerWin,int pPerLoss,int pPerDraw){
         AlphaSystem system = AlphaSystem.getSystem();
         League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
-        if(CurrLeague.setSeasonScoringPolicy(year,pPerWin,pPerLoss,pPerDraw))
+        if(CurrLeague.setSeasonScoringPolicy(year,pPerWin,pPerLoss,pPerDraw)){
+            AlphaSystem.getSystem().getDB().updateSeasonScoringP(LeagueToChange,year,pPerWin,pPerLoss,pPerDraw);
             return true;
+        }
+
         return false;
     }
 
     public boolean ChangeSchedulingPolicyForSeason(String LeagueToChange,int year, int numOfMatches){
         AlphaSystem system = AlphaSystem.getSystem();
         League CurrLeague = (League)system.GetSpecificFromMemory(1,LeagueToChange);
-        if(CurrLeague.setSeasonSchedulingPolicy(year,numOfMatches))
+        if(CurrLeague.setSeasonSchedulingPolicy(year,numOfMatches)) {
+            AlphaSystem.getSystem().getDB().updateSeasonSchedualingP(LeagueToChange,year,numOfMatches);
             return true;
+        }
         return false;
     }
 
@@ -90,12 +114,26 @@ public class AssociationMember extends Member {
 
     public boolean AddPlayerJobToMember(Member member, Player.Position pos, LocalDate dateOfBirth){
         Player newplayer = new Player(member, pos, dateOfBirth);
+        AlphaSystem.getSystem().getDB().insert(newplayer);
         return member.addJob(newplayer);
     }
 
     public boolean AddCoachJobToMember(Member member, Coach.Certification certification){
         Coach newCoach = new Coach(member, certification);
+        AlphaSystem.getSystem().getDB().insert(newCoach);
         return member.addJob(newCoach);
+    }
+
+    public boolean AddManagerJobToMember(Member member){
+        TeamManager newCoach = new TeamManager(member,null,new ArrayList<>());
+        AlphaSystem.getSystem().getDB().insert(newCoach);
+        return member.addJob(newCoach);
+    }
+
+    public boolean AddOwnerJobToMember(Member member){
+        TeamOwner newOwner = new TeamOwner(member);
+        AlphaSystem.getSystem().getDB().insert(newOwner);
+        return member.addJob(newOwner);
     }
 
 

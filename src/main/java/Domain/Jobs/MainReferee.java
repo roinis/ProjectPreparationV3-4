@@ -8,6 +8,5 @@ import Domain.Association.*;
 public class MainReferee extends Referee {
     public MainReferee(Member member) {
         super(member);
-        AlphaSystem.getSystem().getDB().insert(this);
     }
 }

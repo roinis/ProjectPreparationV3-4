@@ -26,7 +26,6 @@ public class League {
         this.leagueVarReferees=new LinkedList<VarReferee>();
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
         alphaSystem.AddtoMemory(1,this);
-        alphaSystem.getDB().insert(this);
     }
 
     public void addRefereesToSeason(Season season){

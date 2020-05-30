@@ -38,7 +38,7 @@ public class Budget {
     }
 
     public void addWithdraw(Double sum,String description,LocalDateTime dateTime){
-        budget-=sum;
+        budget+=sum;
         Pair<Double,String> record=new Pair(sum,description);
         Pair<LocalDateTime,Pair<Double,String>> report=new Pair<>(dateTime,record);
         reports.add(report);

@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 
 public class InsertToDB {
     SQLServerDBAccess DBAccess;
-    public InsertToDB(){
-        DBAccess=new SQLServerDBAccess("jdbc:sqlserver://localhost:1433;databaseName=Football;user=sa;password=Warning11");
+    public InsertToDB(String connectionURL){
+        DBAccess=new SQLServerDBAccess(connectionURL);
     }
 
     private void addLeagueToDB(League league){
@@ -105,7 +105,7 @@ public class InsertToDB {
 
     public void addTeamOwnerToTeamInDB(TeamOwner owner, Team team) {
         String[] values={owner.getMember().getUser_name(),team.toString()};
-        DBAccess.insertTeamOwnerToTeamToDB(owner.getMember().getUser_name(),team.toString());
+        DBAccess.insertTeamOwnerToTeamToDB(owner.getMember().getUser_name(),team.getTeamName());
     }
 
     public void addAppointmentToOwnerInDB(TeamOwner owner,Job appointment){
@@ -349,6 +349,22 @@ public class InsertToDB {
     public void addGameEndEvent(EndGameEvent event,FootballGame game){
         String[] values={game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName()};
         DBAccess.insertGameEndEventToDB(game.getDate()+"",game.getHomeTeamName(),game.getAwayTeamName());
+    }
+
+    public void updateLeagueScoringP(String leagueToChange, int pPerWin, int pPerLoss, int pPerDraw) {
+        DBAccess.updateLeagueScoringP(leagueToChange,pPerWin+"",pPerLoss+"",pPerDraw+"");
+    }
+
+    public void updateLeagueSchedualingP(String leagueToChange, int numOfMatches) {
+        DBAccess.updateLeagueSchedualingP(leagueToChange,numOfMatches+"");
+    }
+
+    public void updateSeasonScoringP(String leagueToChange, int year, int pPerWin, int pPerLoss, int pPerDraw) {
+        DBAccess.updateSeasonScoringP(leagueToChange,year+"",pPerWin+"",pPerLoss+"",pPerDraw+"");
+    }
+
+    public void updateSeasonSchedualingP(String leagueToChange, int year, int numOfMatches) {
+        DBAccess.updateSeasonSchedualingP(leagueToChange,year+"",numOfMatches+"");
     }
 }
 /*

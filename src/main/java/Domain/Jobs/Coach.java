@@ -27,7 +27,6 @@ public class Coach extends Job implements Subject {
         observers=new ArrayList<>();
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
         alphaSystem.AddtoMemory(3,this);
-        alphaSystem.getDB().insert(this);
     }
 
     public Team getTeam() {

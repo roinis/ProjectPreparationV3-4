@@ -177,7 +177,6 @@ public class Season {
 
     public void addGame(FootballGame currGame,String leagueName) {
         games.add(currGame);
-        AlphaSystem.getSystem().getDB().addGameToDB(currGame,getYear()+"",leagueName);
     }
 }
 

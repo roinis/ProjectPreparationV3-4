@@ -11,8 +11,6 @@ public class Stadium {
         this.city=city;
         AlphaSystem alphaSystem= AlphaSystem.getSystem();
         alphaSystem.AddtoMemory(11,this);
-        alphaSystem.getDB().insert(this);
-
     }
 
     public String getStadiumName() {
